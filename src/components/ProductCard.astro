@@ -1,0 +1,31 @@
+---
+const { product, isDarkTheme = false } = Astro.props;
+
+// Basic Shopify data extraction
+const price = product.variants.edges[0]?.node?.price;
+const priceText = price ? `£${parseFloat(price.amount).toFixed(2)}` : '£0.00';
+const images = product.images.edges.map(e => e.node.url);
+const img1 = images[0] || '/images/hero.jpg';
+const img2 = images[1] || null;
+
+const textClass = isDarkTheme ? "text-white" : "text-black";
+---
+
+<div class="group relative">
+    <div class="relative overflow-hidden mb-4 aspect-[4/5] bg-gray-100">
+        <!-- Image 1 -->
+        <img src={img1} alt={product.title} class="w-full h-full object-cover transition-opacity duration-700" />
+        
+        <!-- Hover Image (if it exists) -->
+        {img2 && (
+            <img src={img2} alt={product.title} class="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        )}
+
+        <button class="absolute bottom-0 left-0 w-full bg-white/90 text-black py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 font-bold tracking-widest text-[10px] uppercase">
+            Add to Cart
+        </button>
+    </div>
+    
+    <h4 class={`font-serif text-2xl ${textClass} mb-1`}>{product.title}</h4>
+    <p class="text-[#D4AF37] font-medium">{priceText}</p>
+</div>

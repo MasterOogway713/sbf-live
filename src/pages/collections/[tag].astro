@@ -1,0 +1,103 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { shopifyFetch } from '../../utils/shopify.js';
+
+// 1. getStaticPaths tells Astro which pages to build at compile time
+export async function getStaticPaths() {
+  const tagsQuery = `
+    {
+      products(first: 250) {
+        edges {
+          node {
+            tags
+          }
+        }
+      }
+    }
+  `;
+  
+  const response = await shopifyFetch({ query: tagsQuery });
+  const products = response?.data?.products?.edges || [];
+  
+  // Extract all unique tags from your Shopify products
+  const allTags = new Set();
+  products.forEach((edge) => {
+    edge.node.tags.forEach((tag) => {
+      // Clean the tag for the URL (e.g. "Mother's Day" becomes "mothers-day")
+      allTags.add(tag.toLowerCase().trim().replace(/\s+/g, '-'));
+    });
+  });
+
+  // Return a list of all tags found to generate separate HTML pages
+  return Array.from(allTags).map((tag) => ({
+    params: { tag: tag },
+    props: { originalTag: tag }
+  }));
+}
+
+const { tag } = Astro.params;
+const { originalTag } = Astro.props;
+
+// Fetch products for THIS specific tag
+const productsQuery = `
+  {
+    products(first: 50, query: "tag:${originalTag}") {
+      edges {
+        node {
+          id
+          title
+          handle
+          images(first: 2) {
+            edges { node { url altText } }
+          }
+          variants(first: 1) {
+            edges { node { price { amount currencyCode } } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const productResponse = await shopifyFetch({ query: productsQuery });
+const tagProducts = productResponse?.data?.products?.edges || [];
+
+// Format title for display (e.g. "mothers-day" -> "Mothers Day")
+const displayTitle = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+---
+
+<Layout 
+  title={`${displayTitle} Collection`} 
+  description={`Shop our beautiful ${displayTitle} floral arrangements. Hand-tied by SB Floristry, delivering across Essex and London.`}
+>
+  <!-- Hero Section for the Collection -->
+  <section class="pt-32 pb-16 bg-[#F9F8F6]">
+    <div class="container mx-auto px-6 text-center">
+      <span class="text-[#D4AF37] text-xs tracking-[0.35em] uppercase font-bold mb-4 block">The Collection</span>
+      <h1 class="font-serif text-5xl md:text-7xl mb-4 text-[#1A1A1A] font-light">{displayTitle}</h1>
+      <div class="w-24 h-px bg-[#D4AF37] mx-auto mb-8"></div>
+      <p class="text-gray-500 italic font-serif">Hand-selected stems for our {displayTitle} edit.</p>
+    </div>
+  </section>
+
+  <!-- Product Grid -->
+  <section class="pb-24 bg-[#F9F8F6]">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {tagProducts.map((edge) => (
+          <ProductCard product={edge.node} />
+        ))}
+      </div>
+      
+      {tagProducts.length === 0 && (
+        <div class="text-center py-20 border border-dashed border-gray-200 rounded-lg">
+          <p class="text-gray-400 font-serif italic">
+            We are currently curating new arrangements for the {displayTitle} collection.
+          </p>
+          <a href="/" class="text-[#D4AF37] text-sm uppercase tracking-widest mt-4 inline-block hover:underline">Return Home</a>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

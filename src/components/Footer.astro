@@ -1,0 +1,71 @@
+---
+// src/components/Footer.astro
+---
+
+<footer class="bg-sb-black text-sb-cream pt-20 pb-10 mt-auto">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <!-- Brand Info -->
+            <div>
+                <h3 class="font-serif text-3xl tracking-widest mb-6">SB</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6 font-light">
+                    A mother and daughter floral studio bringing bespoke, luxury arrangements to Essex and London.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="https://instagram.com/sb.floristry" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full border border-gray-600 flex items-center justify-center hover:bg-sb-gold hover:border-sb-gold transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-sm font-bold tracking-[0.25em] uppercase mb-6 text-sb-gold">Quick Links</h4>
+                <ul class="space-y-4 text-sm text-gray-400 font-light">
+                    <li><a href="/collections/signature" class="hover:text-sb-gold transition-colors">Signature Collection</a></li>
+                    <li><a href="/collections/seasonal" class="hover:text-sb-gold transition-colors">Seasonal Edit</a></li>
+                    <li><a href="/collections/weddings" class="hover:text-sb-gold transition-colors">Weddings & Events</a></li>
+                    <li><a href="/collections/sympathy" class="hover:text-sb-gold transition-colors">Sympathy</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h4 class="text-sm font-bold tracking-[0.25em] uppercase mb-6 text-sb-gold">Contact</h4>
+                <ul class="space-y-4 text-sm text-gray-400 font-light">
+                    <li class="flex items-start">
+                        <i class="fas fa-map-marker-alt mt-1 mr-3 text-sb-gold"></i>
+                        <span>Studio based in<br/>Romford, Essex</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mr-3 text-sb-gold"></i>
+                        <a href="mailto:sbfloristry@outlook.com" class="hover:text-sb-gold transition-colors">sbfloristry@outlook.com</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Hours -->
+            <div>
+                <h4 class="text-sm font-bold tracking-[0.25em] uppercase mb-6 text-sb-gold">Studio Hours</h4>
+                <ul class="space-y-4 text-sm text-gray-400 font-light">
+                    <li class="flex justify-between border-b border-gray-800 pb-2">
+                        <span>Monday - Friday</span>
+                        <span>9am - 5pm</span>
+                    </li>
+                    <li class="flex justify-between border-b border-gray-800 pb-2">
+                        <span>Saturday</span>
+                        <span>9am - 2pm</span>
+                    </li>
+                    <li class="flex justify-between pb-2">
+                        <span>Sunday</span>
+                        <span>Closed</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center border-t border-gray-800 pt-8 text-xs text-gray-500 font-light tracking-widest uppercase">
+            &copy; {new Date().getFullYear()} SB Floristry. All rights reserved.
+        </div>
+    </div>
+</footer>

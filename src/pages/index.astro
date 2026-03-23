@@ -1,17 +1,99 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { shopifyFetch } from '../utils/shopify.js';
 
+// Fetch the "Signature" collection specifically for the homepage
+const signatureQuery = `
+  {
+    products(first: 6, query: "tag:signature") {
+      edges {
+        node {
+          id
+          title
+          handle
+          images(first: 2) {
+            edges { node { url altText } }
+          }
+          variants(first: 1) {
+            edges { node { price { amount currencyCode } } }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const response = await shopifyFetch({ query: signatureQuery });
+const signatureProducts = response?.data?.products?.edges || [];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout 
+  title="Luxury Florist in Essex & London" 
+  description="SB Floristry: A mother and daughter studio crafting bespoke, luxury floral arrangements. Delivering to Essex and London."
+>
+  <!-- Hero Section -->
+  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-sb-black/40 z-10"></div>
+    <img src="/images/hero.jpg" alt="Luxury floral arrangement by SB Floristry" class="absolute inset-0 w-full h-full object-cover z-0" />
+    
+    <div class="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
+      <span class="text-sb-gold text-xs md:text-sm tracking-[0.35em] uppercase font-bold mb-6 block drop-shadow-md">Luxury Floral Design</span>
+      <h2 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-tight drop-shadow-lg">
+        Artistry in <br/><span class="italic font-light">Every Bloom</span>
+      </h2>
+      <div class="w-24 h-px bg-sb-gold mx-auto mb-10"></div>
+      <a href="/collections/signature" class="inline-block border border-white text-white px-10 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-white hover:text-sb-black transition-colors duration-400 bg-sb-black/20 backdrop-blur-sm">
+        Shop Collections
+      </a>
+    </div>
+  </section>
+
+  <!-- Featured Collection -->
+  <section class="py-24 bg-sb-cream">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">Our Favourites</span>
+        <h2 class="font-serif text-4xl md:text-5xl text-sb-black mb-6">Signature Collection</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
+          Our most beloved arrangements, hand-tied with premium stems carefully selected for their beauty and longevity.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {signatureProducts.map((edge) => (
+          <ProductCard product={edge.node} />
+        ))}
+      </div>
+      
+      <div class="text-center mt-16">
+        <a href="/collections/signature" class="inline-block border border-sb-black text-sb-black px-12 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-sb-black hover:text-white transition-colors duration-400">
+          View All Signature
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story Section -->
+  <section id="our-story" class="py-24 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
+        <div class="w-full lg:w-1/2 relative group">
+          <div class="absolute -inset-4 border border-sb-gold/30 translate-x-4 translate-y-4 -z-10 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
+          <img src="/images/story-mother-daughter.jpg" alt="Mother and Daughter Florists" class="w-full h-auto object-cover shadow-xl grayscale-[20%] hover:grayscale-0 transition-all duration-700" />
+        </div>
+        <div class="w-full lg:w-1/2">
+          <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">The Studio</span>
+          <h2 class="font-serif text-4xl md:text-5xl text-sb-black mb-8">A Mother & Daughter Story</h2>
+          <p class="text-gray-600 mb-6 font-light leading-relaxed">
+            Welcome to SB Floristry. We are a family-run floral design studio driven by a shared passion for creating unforgettable arrangements. What started as a lifelong love for flowers has blossomed into a dedicated partnership.
+          </p>
+          <p class="text-gray-600 mb-8 font-light leading-relaxed">
+            Every bouquet we create is a reflection of our bond—combining timeless, traditional techniques with contemporary design. We believe that flowers are more than just decoration; they are the heart of life's most meaningful moments.
+          </p>
+          <img src="/images/logo.png" alt="Signature" class="h-12 opacity-80" onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
