@@ -46,45 +46,117 @@ const { title, description } = Astro.props;
     <Footer />
     <CartModal />
 
-    <!-- CLIENT-SIDE JAVASCRIPT -->
     <script is:inline>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- HEADER SCROLL LOGIC ---
-            const header = document.getElementById('mainHeader');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('shadow-md', 'py-2');
-                    header.classList.remove('py-4');
-                } else {
-                    header.classList.remove('shadow-md', 'py-2');
-                    header.classList.add('py-4');
+            // --- CART STATE ---
+            let cart = JSON.parse(localStorage.getItem('sb_cart')) || [];
+
+            const updateUI = () => {
+                const container = document.getElementById('cartItemsContainer');
+                const count = document.getElementById('cartCount');
+                const subtotal = document.getElementById('cartSubtotal');
+                
+                const totalQty = cart.reduce((s, i) => s + i.quantity, 0);
+                if (count) {
+                    count.textContent = totalQty;
+                    count.classList.toggle('hidden', totalQty === 0);
+                }
+
+                if (container) {
+                    if (cart.length === 0) {
+                        container.innerHTML = `<div class="text-center text-gray-500 mt-10 font-serif italic">Your cart is currently empty.</div>`;
+                    } else {
+                        container.innerHTML = cart.map((item, idx) => `
+                            <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                                <img src="${item.image}" class="w-16 h-20 object-cover" alt="${item.title}">
+                                <div class="flex-grow">
+                                    <h4 class="font-serif text-base text-sb-black">${item.title}</h4>
+                                    <p class="text-sb-gold text-xs">£${parseFloat(item.price).toFixed(2)}</p>
+                                    <div class="flex items-center mt-2 border border-gray-200 w-max bg-white">
+                                        <button class="px-2 py-0.5 text-[10px] decrease-qty" data-idx="${idx}">-</button>
+                                        <span class="px-2 py-0.5 text-[10px] border-x border-gray-200">${item.quantity}</span>
+                                        <button class="px-2 py-0.5 text-[10px] increase-qty" data-idx="${idx}">+</button>
+                                    </div>
+                                </div>
+                                <button class="text-gray-300 hover:text-red-400 remove-item" data-idx="${idx}">
+                                    <i class="fas fa-trash-alt text-[10px]"></i>
+                                </button>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
+                if (subtotal) subtotal.textContent = `£${total.toFixed(2)}`;
+                localStorage.setItem('sb_cart', JSON.stringify(cart));
+            };
+
+            // --- LISTENERS ---
+            document.addEventListener('click', (e) => {
+                const addBtn = e.target.closest('.add-to-cart-btn');
+                if (addBtn) {
+                    const id = addBtn.dataset.id;
+                    const exists = cart.find(i => i.id === id);
+                    if (exists) { exists.quantity++; } 
+                    else {
+                        cart.push({
+                            id: id,
+                            title: addBtn.dataset.title,
+                            price: addBtn.dataset.price,
+                            image: addBtn.dataset.image,
+                            quantity: 1
+                        });
+                    }
+                    updateUI();
+                    toggleCart(true);
+                }
+
+                if (e.target.closest('.remove-item')) {
+                    cart.splice(e.target.closest('.remove-item').dataset.idx, 1);
+                    updateUI();
+                }
+
+                if (e.target.closest('.increase-qty')) {
+                    cart[e.target.closest('.increase-qty').dataset.idx].quantity++;
+                    updateUI();
+                }
+
+                if (e.target.closest('.decrease-qty')) {
+                    const i = e.target.closest('.decrease-qty').dataset.idx;
+                    if (cart[i].quantity > 1) cart[i].quantity--;
+                    updateUI();
+                }
+
+                if (e.target.id === 'checkoutBtn' && cart.length > 0) {
+                    const items = cart.map(i => `${i.id.split('/').pop()}:${i.quantity}`).join(',');
+                    window.location.href = `https://sb-floristry.myshopify.com/cart/${items}`;
                 }
             });
 
-            // --- CART LOGIC ---
-            const cartBtn = document.getElementById('cartBtn');
-            const closeCartBtn = document.getElementById('closeCartBtn');
-            const cartSidebar = document.getElementById('cartSidebar');
-            const cartOverlay = document.getElementById('cartOverlay');
-
-            function toggleCart() {
-                const isClosed = cartSidebar.classList.contains('translate-x-full');
-                if (isClosed) {
-                    cartSidebar.classList.remove('translate-x-full');
-                    cartOverlay.classList.remove('hidden');
-                    setTimeout(() => cartOverlay.classList.remove('opacity-0'), 10);
+            // --- UI HELPERS ---
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            
+            function toggleCart(forceOpen = false) {
+                const isOpen = !sidebar.classList.contains('translate-x-full');
+                if (forceOpen || !isOpen) {
+                    sidebar.classList.remove('translate-x-full');
+                    overlay.classList.remove('hidden');
+                    setTimeout(() => overlay.classList.remove('opacity-0'), 10);
                     document.body.style.overflow = 'hidden';
                 } else {
-                    cartSidebar.classList.add('translate-x-full');
-                    cartOverlay.classList.add('opacity-0');
-                    setTimeout(() => cartOverlay.classList.add('hidden'), 300);
+                    sidebar.classList.add('translate-x-full');
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => overlay.classList.add('hidden'), 300);
                     document.body.style.overflow = '';
                 }
             }
 
-            if(cartBtn) cartBtn.addEventListener('click', toggleCart);
-            if(closeCartBtn) closeCartBtn.addEventListener('click', toggleCart);
-            if(cartOverlay) cartOverlay.addEventListener('click', toggleCart);
+            document.getElementById('cartBtn')?.addEventListener('click', () => toggleCart());
+            document.getElementById('closeCartBtn')?.addEventListener('click', () => toggleCart());
+            overlay?.addEventListener('click', () => toggleCart());
+
+            updateUI();
         });
     </script>
 </body>
