@@ -1,24 +1,23 @@
-# build output
-dist/
-# generated types
-.astro/
+Astro build output
 
-# dependencies
+dist/
+
+Dependencies
+
 node_modules/
 
-# logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
+Environment variables
 
-
-# environment variables
 .env
 .env.production
+.env.local
 
-# macOS-specific files
-.DS_Store
+IDEs
 
-# jetbrains setting folder
+.vscode/
 .idea/
+
+OS files
+
+.DS_Store
+Thumbs.db
