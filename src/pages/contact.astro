@@ -3,66 +3,160 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout 
-  title="Contact Us" 
-  description="Get in touch with SB Floristry for bespoke arrangements, events, and weddings."
+  title="Contact Us | Consultations & Inquiries | SB Floristry" 
+  description="Get in touch with the mother and daughter team at SB Floristry. We welcome inquiries for bespoke arrangements, events, and luxury wedding floristry across Essex and London."
 >
-  <section class="pt-40 pb-20 bg-sb-black text-center text-sb-cream transition-colors duration-500">
-      <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">Get in Touch</span>
-      <h1 class="font-serif text-5xl md:text-7xl mb-12 font-light">Contact Us</h1>
-      
-      <div class="flex flex-col md:flex-row justify-center gap-12 mb-16 text-lg font-light tracking-wide reveal">
-          <div>
-              <i class="fas fa-phone text-sb-gold mb-4 text-2xl block"></i>
-              <p class="text-xs uppercase tracking-luxury text-gray-500 mb-2">Telephone</p>
-              <a href="tel:01708956609" class="hover:text-sb-gold transition-colors text-white">01708 956609</a>
-          </div>
-          <div>
-              <i class="fas fa-envelope text-sb-gold mb-4 text-2xl block"></i>
-              <p class="text-xs uppercase tracking-luxury text-gray-500 mb-2">Email</p>
-              <a href="mailto:info@sbfloristry.co.uk" class="hover:text-sb-gold transition-colors text-white">info@sbfloristry.co.uk</a>
-          </div>
+  <!-- SEO Structured Data -->
+  <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "mainEntity": {
+        "@type": "LocalBusiness",
+        "name": "SB Floristry",
+        "telephone": "+44 1708 956609",
+        "email": "info@sbfloristry.co.uk",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Romford",
+          "addressRegion": "Essex",
+          "addressCountry": "UK"
+        },
+        "areaServed": ["Essex", "London"],
+        "openingHours": [
+          "Mo-Fr 09:00-17:00",
+          "Sa 09:00-14:00"
+        ]
+      }
+    }
+  </script>
+
+  <!-- Hero Section -->
+  <section class="relative h-[65vh] overflow-hidden bg-sb-black">
+      <div class="absolute inset-0">
+          <img src="/images/gallery-1.jpg" alt="Florist Tools and Rose Petals" class="w-full h-full object-cover hero-zoom opacity-70" style="object-position: center 30%;">
+          <div class="absolute inset-0 bg-gradient-to-t from-sb-cream via-sb-cream/20 to-black/60"></div>
+      </div>
+      <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-end items-center text-center pb-24">
+          <span class="text-sb-black text-[10px] md:text-xs tracking-[0.35em] uppercase font-bold mb-4 reveal">Inquiries & Consultations</span>
+          <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light text-sb-black reveal">Contact Us</h1>
       </div>
   </section>
 
-  <section class="pb-24 bg-sb-black text-sb-cream border-t border-white/5 transition-colors duration-500">
-      <div class="container mx-auto px-6 max-w-4xl">
-          <form class="space-y-8 reveal" action="#" method="POST">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div class="space-y-1">
-                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Name</label>
-                      <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
-                  </div>
-                  <div class="space-y-1">
-                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Email</label>
-                      <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
+  <!-- Main Contact Section -->
+  <section class="py-20 lg:py-32 bg-sb-cream transition-colors duration-500 relative -mt-10">
+      <div class="container mx-auto px-6 max-w-6xl">
+          <div class="flex flex-col lg:flex-row gap-16 lg:gap-24">
+              
+              <!-- Left: The Form -->
+              <div class="w-full lg:w-3/5 reveal">
+                  <h2 class="font-serif text-4xl text-sb-black mb-6 font-light">Let's Create Something Beautiful</h2>
+                  <p class="text-gray-600 font-light leading-relaxed mb-12 text-lg">
+                      Whether you are planning a grand event, an intimate wedding, or simply wish to order a bespoke arrangement, we would be honored to hear from you. Please complete the form below, and we will respond promptly.
+                  </p>
+
+                  <form class="space-y-8" action="#" method="POST">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div class="space-y-2 relative group">
+                              <label class="text-[10px] font-bold tracking-luxury uppercase text-gray-500 group-focus-within:text-sb-gold transition-colors">Name *</label>
+                              <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-300 focus:border-sb-gold outline-none py-2 transition-colors text-sb-black text-base placeholder-gray-300" placeholder="Jane Doe">
+                          </div>
+                          <div class="space-y-2 relative group">
+                              <label class="text-[10px] font-bold tracking-luxury uppercase text-gray-500 group-focus-within:text-sb-gold transition-colors">Email *</label>
+                              <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-300 focus:border-sb-gold outline-none py-2 transition-colors text-sb-black text-base placeholder-gray-300" placeholder="jane@example.com">
+                          </div>
+                      </div>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                          <div class="space-y-2 relative group">
+                              <label class="text-[10px] font-bold tracking-luxury uppercase text-gray-500 group-focus-within:text-sb-gold transition-colors">Event Date (Optional)</label>
+                              <input type="date" name="date" class="w-full bg-transparent border-b border-gray-300 focus:border-sb-gold outline-none py-2 transition-colors text-gray-600 text-base font-sans cursor-pointer">
+                          </div>
+                          <div class="space-y-2 relative group">
+                              <label class="text-[10px] font-bold tracking-luxury uppercase text-gray-500 group-focus-within:text-sb-gold transition-colors">Inquiry Type *</label>
+                              <select name="interest" class="w-full bg-transparent border-b border-gray-300 focus:border-sb-gold outline-none py-2 transition-colors text-sb-black text-base cursor-pointer">
+                                  <option value="General Inquiry">General Inquiry</option>
+                                  <option value="Weddings">Weddings</option>
+                                  <option value="Events">Events</option>
+                                  <option value="Hotels">Hotels & Spas</option>
+                                  <option value="Bespoke Order">Bespoke Order</option>
+                              </select>
+                          </div>
+                      </div>
+                      
+                      <div class="space-y-2 relative group">
+                          <label class="text-[10px] font-bold tracking-luxury uppercase text-gray-500 group-focus-within:text-sb-gold transition-colors">Message *</label>
+                          <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-300 focus:border-sb-gold outline-none py-2 transition-colors text-sb-black text-base placeholder-gray-300 resize-none" placeholder="Tell us about your floral vision..."></textarea>
+                      </div>
+                      
+                      <div class="pt-6">
+                          <button type="submit" class="btn-luxury border border-sb-black text-sb-black px-12 py-4 uppercase tracking-luxury text-xs font-bold inline-block hover:text-white w-full md:w-auto text-center">
+                              Send Inquiry
+                          </button>
+                      </div>
+                  </form>
+              </div>
+
+              <!-- Right: Studio Details Card -->
+              <div class="w-full lg:w-2/5 reveal" style="transition-delay: 200ms;">
+                  <div class="bg-white p-10 md:p-12 border border-gray-100 shadow-[0_15px_50px_rgba(0,0,0,0.04)] relative h-full">
+                      <!-- Decorative Top Accent -->
+                      <div class="absolute top-0 left-10 right-10 h-[2px] bg-sb-gold/40"></div>
+
+                      <h3 class="font-serif text-3xl text-sb-black mb-10 font-light">The Studio</h3>
+
+                      <div class="space-y-10">
+                          <!-- Direct Contact -->
+                          <div>
+                              <h4 class="text-[10px] uppercase tracking-luxury font-bold text-sb-gold mb-4 block">Direct Contact</h4>
+                              <ul class="space-y-4">
+                                  <li class="flex items-center">
+                                      <i class="fas fa-phone w-8 text-gray-400"></i>
+                                      <a href="tel:01708956609" class="text-gray-600 hover:text-sb-gold transition-colors font-light text-lg">01708 956609</a>
+                                  </li>
+                                  <li class="flex items-center">
+                                      <i class="fas fa-envelope w-8 text-gray-400"></i>
+                                      <a href="mailto:info@sbfloristry.co.uk" class="text-gray-600 hover:text-sb-gold transition-colors font-light text-lg break-all">info@sbfloristry.co.uk</a>
+                                  </li>
+                              </ul>
+                          </div>
+
+                          <!-- Location -->
+                          <div>
+                              <h4 class="text-[10px] uppercase tracking-luxury font-bold text-sb-gold mb-4 block">Location</h4>
+                              <div class="flex items-start">
+                                  <i class="fas fa-map-marker-alt mt-1.5 w-8 text-gray-400"></i>
+                                  <p class="text-gray-600 font-light text-lg leading-relaxed">
+                                      Romford, Essex<br>
+                                      <span class="text-sm italic text-gray-400 mt-1 block">Delivering beautifully across Essex & London</span>
+                                  </p>
+                              </div>
+                          </div>
+
+                          <!-- Hours -->
+                          <div>
+                              <h4 class="text-[10px] uppercase tracking-luxury font-bold text-sb-gold mb-4 block">Studio Hours</h4>
+                              <ul class="space-y-3 text-sm text-gray-600 font-light">
+                                  <li class="flex justify-between border-b border-gray-100 pb-3">
+                                      <span>Monday - Friday</span>
+                                      <span>9:00 am - 5:00 pm</span>
+                                  </li>
+                                  <li class="flex justify-between border-b border-gray-100 pb-3">
+                                      <span>Saturday</span>
+                                      <span>9:00 am - 2:00 pm</span>
+                                  </li>
+                                  <li class="flex justify-between">
+                                      <span>Sunday</span>
+                                      <span class="italic text-gray-400">Closed</span>
+                                  </li>
+                              </ul>
+                          </div>
+
+                      </div>
                   </div>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div class="space-y-1">
-                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Event Date (Optional)</label>
-                      <input type="date" name="date" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-gray-400 text-base">
-                  </div>
-                  <div class="space-y-1">
-                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Interest</label>
-                      <select name="interest" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream text-base">
-                          <option value="General Inquiry" class="bg-sb-black">General Inquiry</option>
-                          <option value="Weddings" class="bg-sb-black">Weddings</option>
-                          <option value="Events" class="bg-sb-black">Events</option>
-                          <option value="Hotels" class="bg-sb-black">Hotels & Spas</option>
-                          <option value="Bespoke Order" class="bg-sb-black">Bespoke Order</option>
-                      </select>
-                  </div>
-              </div>
-              <div class="space-y-1">
-                  <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Message</label>
-                  <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base"></textarea>
-              </div>
-              <div class="text-center pt-8">
-                  <button type="submit" class="btn-luxury border border-sb-cream text-sb-cream px-16 py-4 uppercase tracking-luxury text-xs font-bold inline-block">
-                      Send Inquiry
-                  </button>
-              </div>
-          </form>
+
+          </div>
       </div>
   </section>
 </Layout>
