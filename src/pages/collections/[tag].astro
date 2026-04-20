@@ -41,8 +41,35 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const displayTitle = tag.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
-// Dark Theme logic imported directly from your original index.html JS
+// Dark Theme logic
 const isDark = tag.includes('gothic') || tag.includes('dark') || tag.includes('halloween');
+
+// 1. Dynamic Content Mapper for SEO and Aesthetics
+// This assigns specific luxury descriptions and banner images based on the collection tag.
+const collectionData = {
+  'seasonal': {
+    description: "Embrace the changing of the guard. Our Seasonal Edit captures the fleeting beauty of nature's current offerings, featuring the freshest, most vibrant blooms sourced directly for their peak perfection.",
+    image: "/images/collection-seasonal.jpg"
+  },
+  'signature': {
+    description: "The epitome of SB Floristry. Timeless, elegant, and breathtakingly luxurious. Our Signature Collection features our most sought-after, classic arrangements designed to leave a lasting impression.",
+    image: "/images/collection-signature.jpg"
+  },
+  'weddings': {
+    description: "Romantic, abundant, and utterly bespoke. A curated selection of our finest wedding-inspired arrangements, from delicate bridal touches to grand romantic gestures.",
+    image: "/images/collection-weddings.jpg"
+  },
+  'sympathy': {
+    description: "Thoughtful, gentle, and respectful arrangements crafted to convey your deepest condolences. Using calming palettes and premium stems to honor loved ones with grace.",
+    image: "/images/collection-sympathy.jpg"
+  }
+};
+
+// Fallback for dynamically generated tags that aren't in the explicit list above
+const currentCollection = collectionData[tag.toLowerCase()] || { 
+  description: `Explore our exclusively curated ${displayTitle} floral arrangements. Hand-tied in our Essex studio and delivered with uncompromising care.`, 
+  image: "/images/hero.jpg" 
+};
 
 const productsQuery = `
   {
@@ -63,28 +90,72 @@ const productsQuery = `
 
 const productsResponse = await shopifyFetch({ query: productsQuery });
 const collectionProducts = productsResponse?.data?.products?.edges || [];
+const productCount = collectionProducts.length;
 ---
 
-<Layout title={`${displayTitle} Collection | SB Floristry`} description={`Shop our ${displayTitle} collection.`}>
-  <section class={`pt-40 pb-20 text-center transition-colors duration-500 ${isDark ? 'bg-sb-black text-sb-cream' : 'bg-sb-cream text-sb-black'}`}>
-    <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">The Collection</span>
-    <h1 class={`font-serif text-6xl md:text-8xl mb-6 font-light ${isDark ? 'text-sb-cream' : 'text-sb-black'}`}>
-      {displayTitle}
-    </h1>
-    <p class={`text-xl font-light italic max-w-2xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-      The {displayTitle} Collection
-    </p>
+<Layout title={`${displayTitle} Collection | Luxury Essex Florist | SB Floristry`} description={currentCollection.description}>
+  
+  <!-- SEO Structured Data: CollectionPage -->
+  <script type="application/ld+json" is:inline set:html={`
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "${displayTitle} Collection - SB Floristry",
+      "description": "${currentCollection.description}",
+      "url": "https://www.sbfloristry.co.uk/collections/${tag}",
+      "numberOfItems": ${productCount}
+    }
+  `} />
+
+  <!-- Hero Banner with Background Image -->
+  <section class="relative h-[60vh] overflow-hidden bg-sb-black flex flex-col justify-end">
+    <div class="absolute inset-0">
+      <img src={currentCollection.image} alt={`${displayTitle} Collection`} class="w-full h-full object-cover opacity-70 scale-105" style="object-position: center 40%;">
+      <div class="absolute inset-0 bg-gradient-to-t from-sb-black via-black/40 to-transparent"></div>
+    </div>
+    
+    <div class="relative z-10 container mx-auto px-6 pb-16 text-center text-sb-cream">
+      <!-- Breadcrumbs -->
+      <nav class="text-[10px] tracking-luxury uppercase font-bold text-gray-300 mb-6 flex justify-center items-center space-x-2 reveal">
+        <a href="/" class="hover:text-sb-gold transition-colors">Home</a>
+        <span class="text-gray-500">/</span>
+        <span class="text-gray-500">Collections</span>
+        <span class="text-gray-500">/</span>
+        <span class="text-sb-gold">{displayTitle}</span>
+      </nav>
+      
+      <h1 class="font-serif text-6xl md:text-8xl mb-6 font-light reveal">{displayTitle}</h1>
+      <p class="text-lg md:text-xl font-light italic max-w-2xl mx-auto text-gray-300 reveal drop-shadow-md">
+        {currentCollection.description}
+      </p>
+    </div>
   </section>
 
-  <section class={`pb-24 transition-colors duration-500 ${isDark ? 'bg-sb-black' : 'bg-sb-cream'}`}>
+  <!-- Collection Grid Area -->
+  <section class={`py-16 transition-colors duration-500 ${isDark ? 'bg-sb-black text-sb-cream' : 'bg-sb-cream text-sb-black'}`}>
     <div class="container mx-auto px-6">
-      {collectionProducts.length === 0 ? (
-        <div class="col-span-full text-center py-12">
-          <p class={`text-xl font-serif mb-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No products found.</p>
-          <p class="text-sm text-gray-400">We couldn't find any products tagged with <strong>#{tag}</strong>.</p>
+      
+      <!-- Utility Bar (Product Count & Visual Filter) -->
+      <div class={`flex justify-between items-center pb-6 mb-12 border-b ${isDark ? 'border-white/10' : 'border-gray-200'} reveal`}>
+        <span class="text-[10px] tracking-luxury uppercase font-bold text-gray-500">
+          Showing {productCount} {productCount === 1 ? 'Arrangement' : 'Arrangements'}
+        </span>
+        <!-- Static filter visual for luxury aesthetic -->
+        <span class="text-[10px] tracking-luxury uppercase font-bold flex items-center cursor-pointer hover:text-sb-gold transition-colors">
+          Sort By <i class="fas fa-chevron-down ml-2 text-[8px]"></i>
+        </span>
+      </div>
+
+      <!-- Products -->
+      {productCount === 0 ? (
+        <div class="col-span-full text-center py-24">
+          <i class="fas fa-seedling text-sb-gold text-4xl mb-6 opacity-50"></i>
+          <p class={`text-2xl font-serif mb-2 font-light ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>We are currently arranging new blooms.</p>
+          <p class={`text-sm font-light ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Check back shortly for our updated <strong>{displayTitle}</strong> collection.</p>
+          <a href="/" class="inline-block mt-8 text-[10px] uppercase tracking-luxury font-bold border-b border-sb-gold text-sb-gold pb-1 hover:text-sb-black hover:border-sb-black transition-colors">Return to Home</a>
         </div>
       ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 min-h-[400px]">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 min-h-[400px]">
           {collectionProducts.map((edge) => (
              <ProductCard product={edge.node} isDark={isDark} />
           ))}
