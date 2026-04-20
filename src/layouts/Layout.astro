@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CartModal from '../components/CartModal.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 const { title, description } = Astro.props;
 ---
@@ -13,6 +14,9 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} | SB Floristry</title>
     <meta name="description" content={description}>
+    
+    <!-- This tag enables the luxury SPA-like crossfades between pages -->
+    <ViewTransitions />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +50,7 @@ const { title, description } = Astro.props;
         }
         @keyframes subtleShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
-        /* Scroll Reveal Engine - THIS CAUSES THE WHITE SCREEN WITHOUT THE SCRIPT BELOW */
+        /* Scroll Reveal Engine */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
         .reveal.active { opacity: 1; transform: translateY(0); }
         
@@ -68,7 +72,7 @@ const { title, description } = Astro.props;
     
     <Header />
     
-    <main class="flex-grow">
+    <main class="flex-grow transition-colors duration-500">
         <slot />
     </main>
 
@@ -76,7 +80,8 @@ const { title, description } = Astro.props;
     <CartModal />
 
     <script is:inline>
-        document.addEventListener('DOMContentLoaded', () => {
+        // Use astro:page-load so the script re-runs after a view transition
+        document.addEventListener('astro:page-load', () => {
             // --- 1. ACTIVATION SCRIPT (FIXES THE WHITE SCREEN) ---
             const observer = new IntersectionObserver((entries) => { 
                 entries.forEach(entry => { 
