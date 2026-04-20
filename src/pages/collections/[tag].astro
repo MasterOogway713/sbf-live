@@ -149,21 +149,21 @@ const productCount = collectionProducts.length;
       
       <!-- Utility Bar (Product Count & Sort Filter) -->
       <div class={`flex justify-between items-center pb-6 mb-12 border-b ${isDark ? 'border-white/10' : 'border-gray-200'} reveal`}>
-        <span class="text-[10px] tracking-luxury uppercase font-bold text-gray-500">
+        <span class="text-[10px] tracking-luxury uppercase font-bold text-gray-500 leading-none">
           Showing {productCount} {productCount === 1 ? 'Arrangement' : 'Arrangements'}
         </span>
         
-        <!-- Functional Sort Dropdown -->
-        <div class="relative group flex items-center">
-          <label for="sortSelect" class="text-[10px] tracking-luxury uppercase font-bold text-gray-500 mr-2 hidden sm:block">Sort By:</label>
-          <div class="relative">
-            <select id="sortSelect" class={`appearance-none bg-transparent text-[10px] tracking-luxury uppercase font-bold cursor-pointer outline-none transition-colors pr-6 focus:text-sb-gold ${isDark ? 'text-sb-cream' : 'text-sb-black'}`}>
+        <!-- Functional Sort Dropdown with fixed alignment -->
+        <div class="flex items-center gap-2">
+          <label for="sortSelect" class="text-[10px] tracking-luxury uppercase font-bold text-gray-500 hidden sm:block leading-none mt-[1px]">Sort By:</label>
+          <div class="relative flex items-center">
+            <select id="sortSelect" class={`appearance-none bg-transparent text-[10px] tracking-luxury uppercase font-bold cursor-pointer outline-none transition-colors pr-5 pb-[1px] focus:text-sb-gold leading-none ${isDark ? 'text-sb-cream' : 'text-sb-black'}`}>
               <option value="featured" class="bg-sb-black text-sb-cream">Featured</option>
               <option value="price-asc" class="bg-sb-black text-sb-cream">Price: Low to High</option>
               <option value="price-desc" class="bg-sb-black text-sb-cream">Price: High to Low</option>
               <option value="title-asc" class="bg-sb-black text-sb-cream">Alphabetically: A-Z</option>
             </select>
-            <i class="fas fa-chevron-down absolute right-0 top-1/2 -translate-y-1/2 text-[8px] pointer-events-none text-sb-gold"></i>
+            <i class="fas fa-chevron-down absolute right-0 text-[8px] pointer-events-none text-sb-gold mt-[1px]"></i>
           </div>
         </div>
       </div>
@@ -182,8 +182,7 @@ const productCount = collectionProducts.length;
             const price = edge.node.variants?.edges[0]?.node?.price?.amount || 0;
             const title = edge.node.title || '';
             return (
-              // The wrapper holds the data attributes needed for our sorting script
-              <div class="sortable-item" data-price={price} data-title={title}>
+              <div class="sortable-item transition-all duration-500 ease-in-out" data-price={price} data-title={title}>
                  <ProductCard product={edge.node} isDark={isDark} />
               </div>
             );
@@ -193,7 +192,7 @@ const productCount = collectionProducts.length;
     </div>
   </section>
 
-  <!-- Client-Side Sorting Script -->
+  <!-- Client-Side Sorting Script with Staggered Animation -->
   <script is:inline>
     document.addEventListener('astro:page-load', () => {
       const sortSelect = document.getElementById('sortSelect');
@@ -208,26 +207,45 @@ const productCount = collectionProducts.length;
         const sortBy = e.target.value;
         const items = Array.from(productGrid.children);
 
-        if (sortBy === 'featured') {
-          originalOrder.forEach(item => productGrid.appendChild(item));
-          return;
-        }
-
-        items.sort((a, b) => {
-          if (sortBy === 'price-asc' || sortBy === 'price-desc') {
-            const priceA = parseFloat(a.dataset.price);
-            const priceB = parseFloat(b.dataset.price);
-            return sortBy === 'price-asc' ? priceA - priceB : priceB - priceA;
-          } else if (sortBy === 'title-asc') {
-            const titleA = a.dataset.title.toLowerCase();
-            const titleB = b.dataset.title.toLowerCase();
-            return titleA.localeCompare(titleB);
-          }
-          return 0;
+        // 1. Fade out current items
+        items.forEach(item => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(15px)';
         });
 
-        // Re-append the items in their newly sorted order
-        items.forEach(item => productGrid.appendChild(item));
+        // 2. Wait for fade out, sort, and re-append
+        setTimeout(() => {
+          if (sortBy === 'featured') {
+            originalOrder.forEach(item => productGrid.appendChild(item));
+          } else {
+            items.sort((a, b) => {
+              if (sortBy === 'price-asc' || sortBy === 'price-desc') {
+                const priceA = parseFloat(a.dataset.price);
+                const priceB = parseFloat(b.dataset.price);
+                return sortBy === 'price-asc' ? priceA - priceB : priceB - priceA;
+              } else if (sortBy === 'title-asc') {
+                const titleA = a.dataset.title.toLowerCase();
+                const titleB = b.dataset.title.toLowerCase();
+                return titleA.localeCompare(titleB);
+              }
+              return 0;
+            });
+            items.forEach(item => productGrid.appendChild(item));
+          }
+
+          // 3. Staggered fade in for the luxurious feel
+          const sortedItems = Array.from(productGrid.children);
+          sortedItems.forEach((item, index) => {
+            // Force a reflow to ensure the browser processes the new order
+            void item.offsetWidth;
+            
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'translateY(0)';
+            }, index * 75); // 75ms delay between each card fading in
+          });
+
+        }, 400); // 400ms matches the fade-out duration
       });
     });
   </script>
