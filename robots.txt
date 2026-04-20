@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Point to the sitemap (Update this with your actual domain!)
-Sitemap: https://www.sbfloristry.co.uk/sitemap.xml
+Sitemap: https://www.sbfloristry.co.uk/sitemap-index.xml
