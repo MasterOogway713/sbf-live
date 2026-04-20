@@ -32,32 +32,42 @@ const signatureProducts = response?.data?.products?.edges || [];
   title="Luxury Florist in Essex & London" 
   description="SB Floristry: A mother and daughter studio crafting bespoke, luxury floral arrangements. Delivering to Essex and London."
 >
-  <!-- Hero Section -->
-  <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-sb-black/40 z-10"></div>
-    <img src="/images/hero.jpg" alt="Luxury floral arrangement by SB Floristry" class="absolute inset-0 w-full h-full object-cover z-0" />
-    
-    <div class="relative z-20 text-center px-6 mt-16 max-w-4xl mx-auto">
-      <span class="text-sb-gold text-xs md:text-sm tracking-[0.35em] uppercase font-bold mb-6 block drop-shadow-md">Luxury Floral Design</span>
-      <h2 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-tight drop-shadow-lg">
-        Artistry in <br/><span class="italic font-light">Every Bloom</span>
-      </h2>
-      <div class="w-24 h-px bg-sb-gold mx-auto mb-10"></div>
-      <a href="/collections/signature" class="inline-block border border-white text-white px-10 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-white hover:text-sb-black transition-colors duration-400 bg-sb-black/20 backdrop-blur-sm">
-        Shop Collections
-      </a>
-    </div>
+  <section class="relative h-[90vh] overflow-hidden">
+      <div class="absolute inset-0">
+          <img src="/images/hero.jpg" alt="Luxury Bouquet" class="w-full h-full object-cover hero-zoom opacity-90" style="object-position: center 60%;">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"></div>
+      </div>
+      <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-sb-cream pt-20">
+          <h2 class="text-xs md:text-sm tracking-[0.3em] uppercase mb-8 font-medium text-sb-gold animate-fade-in">Hand-Tied in Essex • Delivered to London</h2>
+          <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl mb-10 leading-none animate-fade-in-up font-normal">
+              Artistry in <br><span class="italic font-light text-gold-metallic">Every Bloom</span>
+          </h1>
+          <a href="/collections/seasonal" class="animate-fade-in btn-luxury border border-sb-cream/30 text-sb-cream px-10 py-3 uppercase tracking-luxury text-xs font-bold hover:border-sb-gold">
+              Shop The Collection
+          </a>
+      </div>
+  </section>
+  
+  <section class="py-24 bg-sb-black text-sb-cream relative border-t border-white/5">
+      <div class="container mx-auto px-6 text-center max-w-2xl">
+          <span class="text-gold-metallic text-2xl mb-6 block reveal"><i class="fas fa-leaf"></i></span>
+          <h2 class="font-serif text-4xl md:text-5xl text-sb-cream mb-8 reveal font-light">A Family Affair</h2>
+          <p class="text-gray-400 leading-relaxed text-xl font-light mb-12 reveal">
+              Welcome to SB Floristry. We are a mother and daughter team bringing bespoke, luxury floral design to weddings, events, and homes across Essex and London. Every arrangement is hand-selected and styled with the care only family can provide.
+          </p>
+          <div class="flex flex-col md:flex-row justify-center gap-12 text-xs font-bold tracking-luxury text-sb-cream uppercase reveal">
+              <div class="flex items-center justify-center"><i class="fas fa-truck mr-3 text-sb-gold"></i> Free Local Delivery</div>
+              <div class="flex items-center justify-center"><i class="fas fa-heart mr-3 text-sb-gold"></i> Family Owned</div>
+          </div>
+      </div>
   </section>
 
-  <!-- Featured Collection -->
   <section class="py-24 bg-sb-cream">
     <div class="container mx-auto px-6">
-      <div class="text-center mb-16">
+      <div class="text-center mb-16 reveal">
         <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">Our Favourites</span>
         <h2 class="font-serif text-4xl md:text-5xl text-sb-black mb-6">Signature Collection</h2>
-        <p class="text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">
-          Our most beloved arrangements, hand-tied with premium stems carefully selected for their beauty and longevity.
-        </p>
+        <div class="w-16 h-px bg-sb-gold mx-auto mt-6"></div>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
@@ -66,33 +76,10 @@ const signatureProducts = response?.data?.products?.edges || [];
         ))}
       </div>
       
-      <div class="text-center mt-16">
-        <a href="/collections/signature" class="inline-block border border-sb-black text-sb-black px-12 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-sb-black hover:text-white transition-colors duration-400">
+      <div class="text-center mt-16 reveal">
+        <a href="/collections/signature" class="inline-block btn-luxury border border-sb-black text-sb-black px-12 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-sb-black hover:text-white transition-colors duration-400">
           View All Signature
         </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Our Story Section -->
-  <section id="our-story" class="py-24 bg-white">
-    <div class="container mx-auto px-6">
-      <div class="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-        <div class="w-full lg:w-1/2 relative group">
-          <div class="absolute -inset-4 border border-sb-gold/30 translate-x-4 translate-y-4 -z-10 transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
-          <img src="/images/story-mother-daughter.jpg" alt="Mother and Daughter Florists" class="w-full h-auto object-cover shadow-xl grayscale-[20%] hover:grayscale-0 transition-all duration-700" />
-        </div>
-        <div class="w-full lg:w-1/2">
-          <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">The Studio</span>
-          <h2 class="font-serif text-4xl md:text-5xl text-sb-black mb-8">A Mother & Daughter Story</h2>
-          <p class="text-gray-600 mb-6 font-light leading-relaxed">
-            Welcome to SB Floristry. We are a family-run floral design studio driven by a shared passion for creating unforgettable arrangements. What started as a lifelong love for flowers has blossomed into a dedicated partnership.
-          </p>
-          <p class="text-gray-600 mb-8 font-light leading-relaxed">
-            Every bouquet we create is a reflection of our bond—combining timeless, traditional techniques with contemporary design. We believe that flowers are more than just decoration; they are the heart of life's most meaningful moments.
-          </p>
-          <img src="/images/logo.png" alt="Signature" class="h-12 opacity-80" onerror="this.style.display='none'" />
-        </div>
       </div>
     </div>
   </section>
