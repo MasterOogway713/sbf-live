@@ -105,7 +105,7 @@ const { title, description } = Astro.props;
                 <i class="fas fa-times text-xl"></i>
             </button>
             <h4 class="font-serif text-3xl text-sb-black mb-2">Delivery Check</h4>
-            <p class="text-xs text-gray-500 tracking-wider uppercase mb-6">Free delivery over £60 within our 3-mile Romford zone</p>
+            <p class="text-xs text-gray-500 tracking-wider uppercase mb-6">Free delivery over £60 within our local zones</p>
             
             <div class="flex flex-col gap-3">
                 <input type="text" id="modalPostcodeInput" placeholder="Enter Postcode (e.g. RM1)" class="w-full bg-white px-4 py-3 text-xs tracking-widest outline-none border border-gray-200 focus:border-sb-gold transition-colors uppercase text-center">
@@ -348,7 +348,8 @@ const { title, description } = Astro.props;
             const modalBtn = document.getElementById('modalCheckPostcodeBtn');
             const modalInput = document.getElementById('modalPostcodeInput');
             const modalResult = document.getElementById('modalPostcodeResult');
-            const validPrefixes = ['RM1', 'RM2', 'RM3', 'RM7', 'RM11', 'RM12'];
+            // Updated valid prefix list
+            const validPrefixes = ['RM1', 'RM11', 'RM12', 'RM2', 'RM3', 'RM4', 'RM5', 'RM7', 'CM13', 'CM14', 'CM15'];
 
             modalBtn?.addEventListener('click', () => {
                 const val = modalInput?.value.trim().toUpperCase();
