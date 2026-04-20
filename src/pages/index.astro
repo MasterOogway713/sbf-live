@@ -60,7 +60,24 @@ const collectionCards = targetTags.map(tag => {
       </div>
   </section>
   
-  <!-- 2. A FAMILY AFFAIR -->
+  <!-- 2. POSTCODE VALIDATOR (NEW SALES FEATURE) -->
+  <section class="py-12 bg-sb-cream border-b border-gray-100">
+      <div class="container mx-auto px-6">
+          <div class="max-w-3xl mx-auto bg-white p-8 shadow-sm reveal flex flex-col md:flex-row items-center justify-between gap-6 border border-gray-100">
+              <div class="text-center md:text-left">
+                  <h4 class="font-serif text-2xl text-sb-black mb-1">Check Delivery Eligibility</h4>
+                  <p class="text-xs text-gray-500 tracking-wider uppercase">Free delivery over £60 within our 3-mile Romford zone</p>
+              </div>
+              <div class="flex w-full md:w-auto">
+                  <input type="text" id="postcodeInput" placeholder="Enter Postcode (e.g. RM1)" class="bg-[#F9F8F6] px-4 py-3 text-xs tracking-widest outline-none border border-gray-200 focus:border-sb-gold transition-colors flex-grow md:w-48 uppercase">
+                  <button id="checkPostcodeBtn" class="bg-sb-black text-sb-gold px-6 py-3 text-[10px] font-bold tracking-luxury uppercase hover:bg-sb-gold hover:text-sb-black transition-colors">Check</button>
+              </div>
+          </div>
+          <div id="postcodeResult" class="max-w-3xl mx-auto mt-4 text-center text-xs font-bold tracking-luxury hidden animate-fade-in"></div>
+      </div>
+  </section>
+
+  <!-- 3. A FAMILY AFFAIR -->
   <section class="py-24 bg-sb-black text-sb-cream relative border-t border-white/5">
       <div class="container mx-auto px-6 text-center max-w-2xl">
           <span class="text-gold-metallic text-2xl mb-6 block reveal"><i class="fas fa-leaf"></i></span>
@@ -75,7 +92,7 @@ const collectionCards = targetTags.map(tag => {
       </div>
   </section>
 
-  <!-- 3. EXPLORE COLLECTIONS -->
+  <!-- 4. EXPLORE COLLECTIONS -->
   <section class="py-24 bg-sb-cream">
     <div class="container mx-auto px-6">
         <div class="text-center mb-16 reveal">
@@ -98,10 +115,10 @@ const collectionCards = targetTags.map(tag => {
     </div>
   </section>
 
-  <!-- 4. TESTIMONIALS SECTION (NEW) -->
+  <!-- 5. TESTIMONIALS SECTION -->
   <Testimonials />
 
-  <!-- 5. OCCASION REMINDER / NEWSLETTER (NEW) -->
+  <!-- 6. OCCASION REMINDER / NEWSLETTER -->
   <section class="py-24 bg-sb-cream border-t border-gray-100">
       <div class="container mx-auto px-6">
           <div class="max-w-4xl mx-auto bg-sb-black p-12 md:p-20 text-center relative overflow-hidden reveal">
@@ -119,7 +136,7 @@ const collectionCards = targetTags.map(tag => {
       </div>
   </section>
 
-  <!-- 6. GLOBAL CONTACT FOOTER -->
+  <!-- 7. GLOBAL CONTACT FOOTER -->
   <section class="py-24 bg-sb-black text-sb-cream border-t border-white/5" id="contact-section">
       <div class="container mx-auto px-6 max-w-4xl">
           <div class="text-center mb-12 reveal">
@@ -127,6 +144,7 @@ const collectionCards = targetTags.map(tag => {
               <p class="font-light text-gray-400 text-lg">Tell us about your event or custom request.</p>
           </div>
           <form id="home-contact-form" class="space-y-8 reveal">
+              <!-- Form fields same as before... -->
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div class="space-y-1">
                       <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Name</label>
@@ -164,4 +182,30 @@ const collectionCards = targetTags.map(tag => {
           </form>
       </div>
   </section>
+
+  <script is:inline>
+      document.addEventListener('astro:page-load', () => {
+          const btn = document.getElementById('checkPostcodeBtn');
+          const input = document.getElementById('postcodeInput');
+          const result = document.getElementById('postcodeResult');
+
+          const validPrefixes = ['RM1', 'RM2', 'RM3', 'RM7', 'RM11', 'RM12'];
+
+          btn?.addEventListener('click', () => {
+              const val = input.value.trim().toUpperCase();
+              if (!val) return;
+
+              result.classList.remove('hidden');
+              const isLocal = validPrefixes.some(p => val.startsWith(p));
+
+              if (isLocal) {
+                  result.className = "max-w-3xl mx-auto mt-4 text-center text-xs font-bold tracking-luxury text-green-600 animate-fade-in";
+                  result.innerHTML = `<i class="fas fa-check-circle mr-2"></i> You are within our Free Delivery zone!`;
+              } else {
+                  result.className = "max-w-3xl mx-auto mt-4 text-center text-xs font-bold tracking-luxury text-sb-gold animate-fade-in";
+                  result.innerHTML = `<i class="fas fa-info-circle mr-2"></i> Standard UK Delivery (£4.99) applies to your area.`;
+              }
+          });
+      });
+  </script>
 </Layout>
