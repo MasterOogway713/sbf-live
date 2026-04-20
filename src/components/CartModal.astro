@@ -8,8 +8,8 @@
     <!-- Header -->
     <div class="flex items-center justify-between p-6 border-b border-white/10 bg-sb-black text-sb-cream">
         <h2 class="font-serif text-3xl font-light">Your Basket</h2>
-        <button id="closeCartBtn" class="text-gray-400 hover:text-sb-gold transition-colors p-2">
-            <i class="fas fa-times text-xl"></i>
+        <button id="closeCartBtn" type="button" class="text-gray-400 hover:text-sb-gold transition-colors p-2">
+            <i class="fas fa-times text-xl pointer-events-none"></i>
         </button>
     </div>
 
@@ -32,8 +32,8 @@
         <!-- Delivery Date Picker -->
         <div class="border-b border-gray-100">
             <button type="button" class="flex items-center justify-between w-full text-left p-5 text-[11px] font-bold tracking-luxury uppercase text-sb-black group" onclick="document.getElementById('deliveryDateSection').classList.toggle('hidden'); this.querySelector('.fa-chevron-down').classList.toggle('rotate-180')">
-                <span class="flex items-center"><i class="fas fa-calendar-alt mr-3 text-sb-gold text-sm"></i> Select Delivery Date</span>
-                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold"></i>
+                <span class="flex items-center pointer-events-none"><i class="fas fa-calendar-alt mr-3 text-sb-gold text-sm"></i> Select Delivery Date</span>
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold pointer-events-none"></i>
             </button>
             <div id="deliveryDateSection" class="hidden px-5 pb-5 animate-fade-in">
                 <input type="date" id="cartDeliveryDate" class="w-full bg-[#F9F8F6] border border-gray-200 p-3 text-sm focus:border-sb-gold outline-none transition-colors text-sb-black font-sans">
@@ -44,8 +44,8 @@
         <!-- Gift Message -->
         <div>
             <button type="button" class="flex items-center justify-between w-full text-left p-5 text-[11px] font-bold tracking-luxury uppercase text-sb-black group" onclick="document.getElementById('giftMessageSection').classList.toggle('hidden'); this.querySelector('.fa-chevron-down').classList.toggle('rotate-180')">
-                <span class="flex items-center"><i class="fas fa-envelope-open-text mr-3 text-sb-gold text-sm"></i> Add a Gift Message</span>
-                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold"></i>
+                <span class="flex items-center pointer-events-none"><i class="fas fa-envelope-open-text mr-3 text-sb-gold text-sm"></i> Add a Gift Message</span>
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold pointer-events-none"></i>
             </button>
             <div id="giftMessageSection" class="hidden px-5 pb-5 animate-fade-in">
                 <textarea id="cartGiftMessage" rows="3" class="w-full bg-[#F9F8F6] border border-gray-200 p-3 text-sm focus:border-sb-gold outline-none transition-colors placeholder-gray-400 font-sans" placeholder="Write your personalized message here..."></textarea>
@@ -61,10 +61,33 @@
             <span id="cartSubtotal" class="font-serif text-3xl text-sb-gold">£0.00</span>
         </div>
         <p class="text-[10px] text-gray-400 text-center mb-6 tracking-wide">Shipping & taxes calculated at checkout</p>
-        <button id="checkoutBtn" class="w-full bg-sb-gold text-sb-black hover:bg-white transition-colors duration-300 py-4 text-[11px] uppercase tracking-[0.25em] font-bold shadow-lg shadow-sb-gold/20 relative overflow-hidden group">
-            <span class="relative z-10 flex items-center justify-center gap-2">
+        
+        <!-- FIX: Added type="button" and pointer-events-none so clicking the text/icon doesn't break the click listener -->
+        <button id="checkoutBtn" type="button" class="w-full bg-sb-gold text-sb-black hover:bg-white transition-colors duration-300 py-4 text-[11px] uppercase tracking-[0.25em] font-bold shadow-lg shadow-sb-gold/20 relative overflow-hidden group">
+            <span class="relative z-10 flex items-center justify-center gap-2 pointer-events-none">
                 Proceed to Secure Checkout <i class="fas fa-lock text-[10px]"></i>
             </span>
         </button>
     </div>
 </div>
+
+<script is:inline>
+    // Set minimum date to 48 hours from today
+    document.addEventListener('astro:page-load', () => {
+        const dateInput = document.getElementById('cartDeliveryDate');
+        if (dateInput) {
+            const today = new Date();
+            // Add 2 days (48 hours)
+            today.setDate(today.getDate() + 2);
+            
+            const yyyy = today.getFullYear();
+            // Add 1 to month because JS months are 0-indexed, and pad with leading zero
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            // Format to YYYY-MM-DD for the date input
+            const minDate = `${yyyy}-${mm}-${dd}`;
+            dateInput.min = minDate;
+        }
+    });
+</script>
