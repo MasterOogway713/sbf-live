@@ -45,7 +45,7 @@ const displayTitle = tag.split('-').map(word => word.charAt(0).toUpperCase() + w
 const isDark = tag.includes('gothic') || tag.includes('dark') || tag.includes('halloween');
 
 // 1. Dynamic Content Mapper for SEO and Aesthetics
-// This assigns specific luxury descriptions and banner images based on the collection tag.
+// Expanded with richer, distinct descriptions for various potential collections
 const collectionData = {
   'seasonal': {
     description: "Embrace the changing of the guard. Our Seasonal Edit captures the fleeting beauty of nature's current offerings, featuring the freshest, most vibrant blooms sourced directly for their peak perfection.",
@@ -62,13 +62,25 @@ const collectionData = {
   'sympathy': {
     description: "Thoughtful, gentle, and respectful arrangements crafted to convey your deepest condolences. Using calming palettes and premium stems to honor loved ones with grace.",
     image: "/images/collection-sympathy.jpg"
+  },
+  'gothic': {
+    description: "Moody, dramatic, and unapologetically bold. The Gothic Edit features deep, velvety hues, striking silhouettes, and rich textures for those who find exquisite beauty in the shadows.",
+    image: "/images/gallery-1.jpg"
+  },
+  'luxury': {
+    description: "Uncompromising opulence. Our Luxury Collection showcases the rarest stems and most extravagant, voluminous designs, curated strictly for moments that demand absolute perfection.",
+    image: "/images/hero.jpg"
+  },
+  'fairytale': {
+    description: "Ethereal, soft, and deeply romantic. Step into a world of whimsical pastels, trailing foliage, and enchanting blooms straight out of a storybook.",
+    image: "/images/product-pure-elegance.jpg"
   }
 };
 
 // Fallback for dynamically generated tags that aren't in the explicit list above
 const currentCollection = collectionData[tag.toLowerCase()] || { 
-  description: `Explore our exclusively curated ${displayTitle} floral arrangements. Hand-tied in our Essex studio and delivered with uncompromising care.`, 
-  image: "/images/hero.jpg" 
+  description: `Discover the art of gifting with our exclusive ${displayTitle} collection. Hand-tied by our expert florists in Essex and delivered with uncompromising care.`, 
+  image: "/images/gallery-3.jpg" 
 };
 
 const productsQuery = `
@@ -135,15 +147,25 @@ const productCount = collectionProducts.length;
   <section class={`py-16 transition-colors duration-500 ${isDark ? 'bg-sb-black text-sb-cream' : 'bg-sb-cream text-sb-black'}`}>
     <div class="container mx-auto px-6">
       
-      <!-- Utility Bar (Product Count & Visual Filter) -->
+      <!-- Utility Bar (Product Count & Sort Filter) -->
       <div class={`flex justify-between items-center pb-6 mb-12 border-b ${isDark ? 'border-white/10' : 'border-gray-200'} reveal`}>
         <span class="text-[10px] tracking-luxury uppercase font-bold text-gray-500">
           Showing {productCount} {productCount === 1 ? 'Arrangement' : 'Arrangements'}
         </span>
-        <!-- Static filter visual for luxury aesthetic -->
-        <span class="text-[10px] tracking-luxury uppercase font-bold flex items-center cursor-pointer hover:text-sb-gold transition-colors">
-          Sort By <i class="fas fa-chevron-down ml-2 text-[8px]"></i>
-        </span>
+        
+        <!-- Functional Sort Dropdown -->
+        <div class="relative group flex items-center">
+          <label for="sortSelect" class="text-[10px] tracking-luxury uppercase font-bold text-gray-500 mr-2 hidden sm:block">Sort By:</label>
+          <div class="relative">
+            <select id="sortSelect" class={`appearance-none bg-transparent text-[10px] tracking-luxury uppercase font-bold cursor-pointer outline-none transition-colors pr-6 focus:text-sb-gold ${isDark ? 'text-sb-cream' : 'text-sb-black'}`}>
+              <option value="featured" class="bg-sb-black text-sb-cream">Featured</option>
+              <option value="price-asc" class="bg-sb-black text-sb-cream">Price: Low to High</option>
+              <option value="price-desc" class="bg-sb-black text-sb-cream">Price: High to Low</option>
+              <option value="title-asc" class="bg-sb-black text-sb-cream">Alphabetically: A-Z</option>
+            </select>
+            <i class="fas fa-chevron-down absolute right-0 top-1/2 -translate-y-1/2 text-[8px] pointer-events-none text-sb-gold"></i>
+          </div>
+        </div>
       </div>
 
       <!-- Products -->
@@ -155,12 +177,58 @@ const productCount = collectionProducts.length;
           <a href="/" class="inline-block mt-8 text-[10px] uppercase tracking-luxury font-bold border-b border-sb-gold text-sb-gold pb-1 hover:text-sb-black hover:border-sb-black transition-colors">Return to Home</a>
         </div>
       ) : (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 min-h-[400px]">
-          {collectionProducts.map((edge) => (
-             <ProductCard product={edge.node} isDark={isDark} />
-          ))}
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16 min-h-[400px]">
+          {collectionProducts.map((edge) => {
+            const price = edge.node.variants?.edges[0]?.node?.price?.amount || 0;
+            const title = edge.node.title || '';
+            return (
+              // The wrapper holds the data attributes needed for our sorting script
+              <div class="sortable-item" data-price={price} data-title={title}>
+                 <ProductCard product={edge.node} isDark={isDark} />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
   </section>
+
+  <!-- Client-Side Sorting Script -->
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      const sortSelect = document.getElementById('sortSelect');
+      const productGrid = document.getElementById('productGrid');
+      
+      if (!sortSelect || !productGrid) return;
+
+      // Cache the original DOM nodes order to restore the "Featured" default
+      const originalOrder = Array.from(productGrid.children);
+
+      sortSelect.addEventListener('change', (e) => {
+        const sortBy = e.target.value;
+        const items = Array.from(productGrid.children);
+
+        if (sortBy === 'featured') {
+          originalOrder.forEach(item => productGrid.appendChild(item));
+          return;
+        }
+
+        items.sort((a, b) => {
+          if (sortBy === 'price-asc' || sortBy === 'price-desc') {
+            const priceA = parseFloat(a.dataset.price);
+            const priceB = parseFloat(b.dataset.price);
+            return sortBy === 'price-asc' ? priceA - priceB : priceB - priceA;
+          } else if (sortBy === 'title-asc') {
+            const titleA = a.dataset.title.toLowerCase();
+            const titleB = b.dataset.title.toLowerCase();
+            return titleA.localeCompare(titleB);
+          }
+          return 0;
+        });
+
+        // Re-append the items in their newly sorted order
+        items.forEach(item => productGrid.appendChild(item));
+      });
+    });
+  </script>
 </Layout>
