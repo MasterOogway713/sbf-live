@@ -1,37 +1,50 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProductCard from '../components/ProductCard.astro';
 import { shopifyFetch } from '../utils/shopify.js';
 
-// Fetch the "Signature" collection specifically for the homepage
-const signatureQuery = `
-  {
-    products(first: 6, query: "tag:signature") {
-      edges {
-        node {
-          id
-          title
-          handle
-          images(first: 2) {
-            edges { node { url altText } }
-          }
-          variants(first: 1) {
-            edges { node { price { amount currencyCode } } }
-          }
-        }
+// 1. Fetch images for the "Explore Our Collections" grid
+// This perfectly mirrors the Javascript from your original index.html!
+const targetTags = ['seasonal', 'luxury', 'gothic', 'fairytale'];
+
+const queryBody = targetTags.map(tag => `
+  ${tag}: products(first: 10, query: "tag:${tag} AND available_for_sale:true") {
+    edges {
+      node {
+        images(first: 1) { edges { node { url } } }
       }
     }
   }
-`;
+`).join('\n');
 
-const response = await shopifyFetch({ query: signatureQuery });
-const signatureProducts = response?.data?.products?.edges || [];
+const query = `{ ${queryBody} }`;
+const response = await shopifyFetch({ query });
+const collectionsData = response?.data || {};
+
+// Format the data into collection cards
+const collectionCards = targetTags.map(tag => {
+  const products = collectionsData[tag]?.edges || [];
+  const validProducts = products.filter(p => p.node?.images?.edges?.length > 0);
+  let imgSrc = 'https://via.placeholder.com/600x800?text=Coming+Soon';
+  
+  // Grab the first valid product image to use as the background
+  if (validProducts.length > 0) {
+    imgSrc = validProducts[0].node.images.edges[0].node.url;
+  }
+  
+  return {
+    tag: tag,
+    title: tag.charAt(0).toUpperCase() + tag.slice(1),
+    imgSrc: imgSrc,
+    link: `/collections/${tag}`
+  };
+});
 ---
 
 <Layout 
   title="Luxury Florist in Essex & London" 
   description="SB Floristry: A mother and daughter studio crafting bespoke, luxury floral arrangements. Delivering to Essex and London."
 >
+  <!-- 1. HERO SECTION -->
   <section class="relative h-[90vh] overflow-hidden">
       <div class="absolute inset-0">
           <img src="/images/hero.jpg" alt="Luxury Bouquet" class="w-full h-full object-cover hero-zoom opacity-90" style="object-position: center 60%;">
@@ -48,6 +61,7 @@ const signatureProducts = response?.data?.products?.edges || [];
       </div>
   </section>
   
+  <!-- 2. A FAMILY AFFAIR SECTION -->
   <section class="py-24 bg-sb-black text-sb-cream relative border-t border-white/5">
       <div class="container mx-auto px-6 text-center max-w-2xl">
           <span class="text-gold-metallic text-2xl mb-6 block reveal"><i class="fas fa-leaf"></i></span>
@@ -62,25 +76,72 @@ const signatureProducts = response?.data?.products?.edges || [];
       </div>
   </section>
 
+  <!-- 3. EXPLORE OUR COLLECTIONS GRID (Mirrors your index.html exactly) -->
   <section class="py-24 bg-sb-cream">
     <div class="container mx-auto px-6">
-      <div class="text-center mb-16 reveal">
-        <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">Our Favourites</span>
-        <h2 class="font-serif text-4xl md:text-5xl text-sb-black mb-6">Signature Collection</h2>
-        <div class="w-16 h-px bg-sb-gold mx-auto mt-6"></div>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {signatureProducts.map((edge) => (
-          <ProductCard product={edge.node} />
-        ))}
-      </div>
-      
-      <div class="text-center mt-16 reveal">
-        <a href="/collections/signature" class="inline-block btn-luxury border border-sb-black text-sb-black px-12 py-4 font-bold tracking-[0.2em] text-[10px] uppercase hover:bg-sb-black hover:text-white transition-colors duration-400">
-          View All Signature
-        </a>
-      </div>
+        <div class="text-center mb-16 reveal">
+            <h3 class="font-serif text-5xl text-sb-black mb-4 font-light">Explore Our Collections</h3>
+            <div class="w-16 h-px bg-sb-gold mx-auto mt-6"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="home-collections-grid">
+            {collectionCards.map((card) => (
+                <a href={card.link} class="group relative block h-[500px] overflow-hidden cursor-pointer reveal">
+                    <img src={card.imgSrc} alt={card.title} class="w-full h-full object-cover transition-transform duration-[1.5s] group-hover:scale-105 loaded" />
+                    <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-500"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                        <h4 class="font-serif text-4xl text-sb-cream mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 font-light">{card.title}</h4>
+                        <span class="text-sb-cream text-xs tracking-luxury uppercase border-b border-transparent group-hover:border-sb-cream pb-1 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">View Collection</span>
+                    </div>
+                </a>
+            ))}
+        </div>
     </div>
+  </section>
+
+  <!-- 4. GLOBAL CONTACT FOOTER (From your original index.html) -->
+  <section class="py-24 bg-sb-black text-sb-cream border-t border-white/5" id="contact-section">
+      <div class="container mx-auto px-6 max-w-4xl">
+          <div class="text-center mb-12 reveal">
+              <h3 class="font-serif text-5xl md:text-6xl text-sb-cream mb-4 font-light">Start Your Floral Journey</h3>
+              <p class="font-light text-gray-400 text-lg">Tell us about your event or custom request.</p>
+          </div>
+          <form id="home-contact-form" class="space-y-8 reveal">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Name</label>
+                      <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
+                  </div>
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Email</label>
+                      <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
+                  </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Event Date (Optional)</label>
+                      <input type="date" name="date" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream text-gray-400 text-base">
+                  </div>
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Interest</label>
+                      <select name="interest" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream text-base">
+                          <option value="Weddings" class="bg-sb-black">Weddings</option>
+                          <option value="Events" class="bg-sb-black">Events</option>
+                          <option value="Hotels" class="bg-sb-black">Hotels & Spas</option>
+                          <option value="Bespoke Order" class="bg-sb-black">Bespoke Order</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="space-y-1">
+                  <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Message</label>
+                  <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base"></textarea>
+              </div>
+              <div class="text-center pt-8">
+                  <button type="submit" class="btn-luxury border border-sb-cream text-sb-cream px-16 py-4 uppercase tracking-luxury text-xs font-bold inline-block">
+                      Send Inquiry
+                  </button>
+              </div>
+          </form>
+      </div>
   </section>
 </Layout>
