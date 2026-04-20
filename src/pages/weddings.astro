@@ -3,51 +3,127 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout 
-  title="Weddings & Events" 
-  description="Bespoke wedding floristry in Essex and London. Your love story, in bloom."
+  title="Luxury Wedding Florist in Essex & London | SB Floristry" 
+  description="Bespoke luxury wedding floristry across Essex and London. From intimate bridal bouquets to breathtaking venue installations, let us tell your love story in bloom."
 >
-  <section class="relative h-[60vh] overflow-hidden">
+  <!-- SEO Structured Data -->
+  <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Wedding Floristry",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "SB Floristry",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Romford",
+          "addressRegion": "Essex",
+          "addressCountry": "UK"
+        }
+      },
+      "areaServed": ["Essex", "London"],
+      "description": "Bespoke luxury wedding flowers, bridal bouquets, and venue installations."
+    }
+  </script>
+
+  <!-- Hero Section -->
+  <section class="relative h-[85vh] overflow-hidden bg-sb-black">
       <div class="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070" alt="Weddings Banner" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-black/50"></div>
+          <img src="/images/weddings-bg.jpg" alt="Luxury Wedding Floral Setup" class="w-full h-full object-cover hero-zoom opacity-80" style="object-position: center 70%;">
+          <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-sb-cream"></div>
       </div>
-      <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-sb-cream">
-          <h1 class="font-serif text-6xl md:text-8xl mb-6 font-light reveal">Weddings</h1>
+      <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-sb-cream pt-20">
+          <span class="text-sb-gold text-[10px] md:text-xs tracking-[0.35em] uppercase font-bold mb-6 reveal">Bespoke Bridal Design</span>
+          <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl mb-8 font-light reveal text-shadow-sm">Weddings</h1>
+          <p class="text-lg md:text-xl font-light italic max-w-2xl mx-auto reveal tracking-wide opacity-90">
+            Crafting unforgettable atmospheres for your most treasured day.
+          </p>
       </div>
   </section>
   
-  <section class="py-24 bg-sb-cream transition-colors duration-500">
+  <!-- Introduction -->
+  <section class="py-24 lg:py-32 bg-sb-cream text-sb-black transition-colors duration-500">
       <div class="container mx-auto px-6 max-w-4xl text-center">
-          <h2 class="font-serif text-4xl text-sb-black mb-8 font-light italic reveal">Your Love Story, In Bloom</h2>
-          <p class="text-xl text-gray-600 font-light leading-relaxed mb-12 reveal">
-              From charming Essex countryside weddings to glamorous London ballroom celebrations, we design with heart and precision. We believe your wedding flowers should be as unique as your relationship, setting the tone for a day you will never forget.
+          <h2 class="font-serif text-4xl lg:text-5xl mb-8 font-light italic reveal">Your Love Story, In Bloom</h2>
+          <p class="text-xl text-gray-600 font-light leading-relaxed mb-12 reveal drop-cap">
+              <span class="text-5xl font-serif float-left mr-3 text-sb-gold mt-1">F</span>rom charming Essex countryside estates to glamorous London ballroom celebrations, we design with absolute heart and meticulous precision. We believe your wedding flowers should be as unique and profound as your relationship, setting a breathtaking tone for a day you will never forget.
           </p>
+          <div class="w-24 h-px bg-sb-gold mx-auto reveal"></div>
+      </div>
+  </section>
+
+  <!-- Editorial Services Layout -->
+  <section class="py-12 bg-sb-cream overflow-hidden">
+      <div class="container mx-auto px-6">
           
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-16 mb-16 text-left">
-              <div class="text-center reveal" style="transition-delay: 100ms;">
-                  <div class="h-64 overflow-hidden mb-6">
-                      <img src="https://images.unsplash.com/photo-1522673607200-1645062cd4d1?q=80&w=2070" alt="Bridal Party" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-                  </div>
-                  <h3 class="font-serif text-2xl text-sb-black mb-2">Bridal Party</h3>
-                  <p class="text-sm text-gray-500 leading-relaxed">Exquisite bouquets and buttonholes tailored to your palette.</p>
+          <!-- Bridal Party (Image Left, Text Right) -->
+          <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 mb-32 reveal">
+              <div class="w-full lg:w-1/2 relative group">
+                  <div class="absolute inset-0 bg-sb-gold/10 translate-x-4 translate-y-4 -z-10 transition-transform duration-500 group-hover:translate-x-6 group-hover:translate-y-6"></div>
+                  <img src="/images/product-pure-elegance.jpg" alt="Bridal Bouquets" class="w-full h-[600px] object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700">
               </div>
-              <div class="text-center reveal" style="transition-delay: 200ms;">
-                  <div class="h-64 overflow-hidden mb-6">
-                      <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069" alt="Ceremony" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-                  </div>
-                  <h3 class="font-serif text-2xl text-sb-black mb-2">Ceremony</h3>
-                  <p class="text-sm text-gray-500 leading-relaxed">Aisle markers, archways, and pew ends that create a magical setting.</p>
-              </div>
-              <div class="text-center reveal" style="transition-delay: 300ms;">
-                  <div class="h-64 overflow-hidden mb-6">
-                      <img src="https://images.unsplash.com/photo-1519225421980-715cb0202128?q=80&w=2070" alt="Reception" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
-                  </div>
-                  <h3 class="font-serif text-2xl text-sb-black mb-2">Reception</h3>
-                  <p class="text-sm text-gray-500 leading-relaxed">Breathtaking centrepieces and installations for the perfect celebration.</p>
+              <div class="w-full lg:w-1/2 lg:pr-12">
+                  <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">01. The Personal Details</span>
+                  <h3 class="font-serif text-4xl text-sb-black mb-6">The Bridal Party</h3>
+                  <p class="text-gray-600 leading-relaxed font-light text-lg mb-8">
+                      The bouquet is the ultimate bridal accessory. From cascading traditional teardrops to wild, asymmetrical modern gatherings, we hand-select the finest stems to perfectly complement your gown. We extend this meticulous attention to detail to bridesmaids' posies, delicate flower crowns, and tailored buttonholes.
+                  </p>
               </div>
           </div>
 
-          <a href="/contact" class="btn-luxury border border-sb-black text-sb-black px-10 py-3 uppercase tracking-luxury text-xs font-bold inline-block reveal">Book Consultation</a>
+          <!-- Ceremony (Text Left, Image Right) -->
+          <div class="flex flex-col lg:flex-row-reverse items-center gap-12 lg:gap-24 mb-32 reveal">
+              <div class="w-full lg:w-1/2 relative group">
+                  <div class="absolute inset-0 bg-sb-black/5 -translate-x-4 translate-y-4 -z-10 transition-transform duration-500 group-hover:-translate-x-6 group-hover:translate-y-6"></div>
+                  <img src="/images/collection-weddings.jpg" alt="Wedding Ceremony Archway" class="w-full h-[600px] object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700">
+              </div>
+              <div class="w-full lg:w-1/2 lg:pl-12">
+                  <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">02. The Vows</span>
+                  <h3 class="font-serif text-4xl text-sb-black mb-6">The Ceremony</h3>
+                  <p class="text-gray-600 leading-relaxed font-light text-lg mb-8">
+                      Frame the moment you say "I do" with breathtaking botanical architecture. Whether you envision a lush, deconstructed floral archway, romantic meadow aisle runners, or elegant urns flanking the altar, we design ceremony spaces that evoke pure romance and reverence.
+                  </p>
+              </div>
+          </div>
+
+          <!-- Reception (Image Left, Text Right) -->
+          <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-24 mb-16 reveal">
+              <div class="w-full lg:w-1/2 relative group">
+                  <div class="absolute inset-0 bg-sb-gold/10 translate-x-4 -translate-y-4 -z-10 transition-transform duration-500 group-hover:translate-x-6 group-hover:-translate-y-6"></div>
+                  <img src="/images/gallery-5.jpg" alt="Wedding Reception Installation" class="w-full h-[600px] object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-700">
+              </div>
+              <div class="w-full lg:w-1/2 lg:pr-12">
+                  <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">03. The Celebration</span>
+                  <h3 class="font-serif text-4xl text-sb-black mb-6">The Reception</h3>
+                  <p class="text-gray-600 leading-relaxed font-light text-lg mb-8">
+                      Transform your venue into a mesmerizing landscape. We specialize in dramatic hanging installations, abundant tablescapes, and focal point bar designs that leave a lasting impression on your guests. Every element is styled on-site by our expert team to ensure flawless execution.
+                  </p>
+              </div>
+          </div>
+
+      </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-32 bg-sb-black text-sb-cream text-center relative border-t border-white/10">
+      <div class="container mx-auto px-6 max-w-3xl reveal">
+          <h2 class="font-serif text-5xl mb-6 font-light">Begin Your Journey</h2>
+          <p class="text-gray-400 text-lg font-light mb-12">
+              We take on a limited number of weddings each year to ensure our couples receive our undivided attention. Contact us to arrange a private consultation.
+          </p>
+          <a href="/contact" class="btn-luxury border border-sb-gold text-sb-cream px-12 py-4 uppercase tracking-luxury text-xs font-bold inline-block hover:text-sb-black">
+              Request a Consultation
+          </a>
       </div>
   </section>
 </Layout>
+
+<style>
+  .drop-cap span {
+    line-height: 0.8;
+  }
+  .text-shadow-sm {
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+  }
+</style>
