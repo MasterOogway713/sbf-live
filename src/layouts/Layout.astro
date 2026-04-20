@@ -100,6 +100,9 @@ const { title, description } = Astro.props;
 
             // --- 2. CART STATE LOGIC ---
             let cart = JSON.parse(localStorage.getItem('sb_cart')) || [];
+            
+            // FIX: Clear out any broken "undefined" items from your previous tests!
+            cart = cart.filter(i => i.id && String(i.id) !== 'undefined');
 
             const updateUI = () => {
                 const container = document.getElementById('cartItemsContainer');
@@ -118,7 +121,8 @@ const { title, description } = Astro.props;
                     } else {
                         container.innerHTML = cart.map((item, idx) => `
                             <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
-                                <img src="${item.image}" class="w-16 h-20 object-cover" alt="${item.title}">
+                                <!-- FIX: Added style="opacity: 1 !important" to bypass the global image hiding CSS -->
+                                <img src="${item.image}" class="w-16 h-20 object-cover loaded" style="opacity: 1 !important;" alt="${item.title}">
                                 <div class="flex-grow">
                                     <h4 class="font-serif text-base text-sb-black">${item.title}</h4>
                                     <p class="text-sb-gold text-xs">£${parseFloat(item.price).toFixed(2)}</p>
@@ -138,6 +142,29 @@ const { title, description } = Astro.props;
 
                 const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
                 if (subtotal) subtotal.textContent = `£${total.toFixed(2)}`;
+                
+                // --- NEW: Delivery Progress Bar Logic ---
+                const freeDeliveryThreshold = 60;
+                const progressContainer = document.getElementById('deliveryProgressContainer');
+                const progressText = document.getElementById('deliveryProgressText');
+                const progressBar = document.getElementById('deliveryProgressBar');
+                const amountNeeded = document.getElementById('deliveryAmountNeeded');
+                
+                if (progressContainer && progressBar && progressText) {
+                    progressContainer.classList.remove('hidden');
+                    if (total >= freeDeliveryThreshold) {
+                        progressText.innerHTML = `<i class="fas fa-check-circle mr-1"></i> You've unlocked Free Local Delivery!`;
+                        progressBar.style.width = '100%';
+                    } else {
+                        const remaining = (freeDeliveryThreshold - total).toFixed(2);
+                        if(amountNeeded) amountNeeded.textContent = remaining;
+                        progressText.innerHTML = `Spend £<span id="deliveryAmountNeeded">${remaining}</span> more for Free Local Delivery`;
+                        progressBar.style.width = `${(total / freeDeliveryThreshold) * 100}%`;
+                    }
+                    // Hide the bar completely if the cart is completely empty
+                    if (total === 0) progressContainer.classList.add('hidden');
+                }
+
                 localStorage.setItem('sb_cart', JSON.stringify(cart));
             };
 
@@ -177,9 +204,43 @@ const { title, description } = Astro.props;
                     updateUI();
                 }
 
-                if (e.target.id === 'checkoutBtn' && cart.length > 0) {
-                    const items = cart.map(i => `${i.id.split('/').pop()}:${i.quantity}`).join(',');
-                    window.location.href = `https://sb-floristry.myshopify.com/cart/${items}`;
+                // --- UPDATED: Checkout logic to include Date & Message ---
+                if (e.target.closest('#checkoutBtn')) {
+                    
+                    if (cart.length === 0) {
+                        alert("Your basket is currently empty! Add some beautiful blooms before checking out.");
+                        return;
+                    }
+
+                    // FIX: Decode Shopify Base64 IDs to retrieve the Numeric Variant ID!
+                    const items = cart.map(i => {
+                        let numericId = String(i.id);
+                        try {
+                            if (!numericId.includes('gid://')) {
+                                numericId = atob(numericId); // Decodes the Base64 String
+                            }
+                            numericId = numericId.split('/').pop(); // Grabs the number
+                        } catch(err) {
+                            numericId = numericId.split('/').pop(); // Fallback
+                        }
+                        return `${numericId}:${i.quantity}`;
+                    }).join(',');
+                    
+                    const giftMessage = document.getElementById('cartGiftMessage')?.value || '';
+                    const deliveryDate = document.getElementById('cartDeliveryDate')?.value || '';
+                    
+                    let checkoutUrl = `https://sb-floristry.myshopify.com/cart/${items}`;
+                    const params = new URLSearchParams();
+                    
+                    if (giftMessage) params.append('note', `Gift Message: ${giftMessage}`);
+                    if (deliveryDate) params.append('attributes[Delivery Date]', deliveryDate);
+                    
+                    const queryString = params.toString();
+                    if (queryString) {
+                        checkoutUrl += `?${queryString}`;
+                    }
+                    
+                    window.location.href = checkoutUrl;
                 }
             });
 
