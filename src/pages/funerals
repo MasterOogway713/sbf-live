@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Sympathy & Remembrance" 
+  description="Farewell with grace. Thoughtful, bespoke sympathy flowers."
+>
+  <section class="pt-40 pb-20 bg-sb-cream text-center transition-colors duration-500">
+      <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block reveal">Sympathy & Remembrance</span>
+      <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light text-sb-black reveal">Farewell with Grace</h1>
+  </section>
+  
+  <section class="pb-24 bg-sb-cream transition-colors duration-500">
+      <div class="container mx-auto px-6 max-w-4xl">
+           <div class="text-center mb-16 reveal">
+              <p class="text-xl text-gray-600 font-light leading-relaxed">
+                  We understand the importance of saying goodbye beautifully. Sympathy arrangements created with care using seasonal blooms. Let us help you express your condolences when words are not enough.
+              </p>
+           </div>
+           <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+               <div class="bg-white p-8 shadow-sm hover:shadow-md transition-shadow reveal" style="transition-delay: 100ms;">
+                   <h3 class="font-serif text-2xl text-sb-black mb-4">Casket Sprays</h3>
+                   <p class="text-gray-500 font-light mb-4">Elegant, double-ended sprays that sit perfectly atop the casket. Available in various sizes and color palettes.</p>
+                   <span class="text-sb-gold text-xs tracking-widest uppercase font-bold">From £150</span>
+               </div>
+               <div class="bg-white p-8 shadow-sm hover:shadow-md transition-shadow reveal" style="transition-delay: 200ms;">
+                   <h3 class="font-serif text-2xl text-sb-black mb-4">Wreaths & Hearts</h3>
+                   <p class="text-gray-500 font-light mb-4">Traditional circular wreaths or heart-shaped tributes symbolizing eternal love. Hand-made with fresh moss bases.</p>
+                   <span class="text-sb-gold text-xs tracking-widest uppercase font-bold">From £65</span>
+               </div>
+               <div class="bg-white p-8 shadow-sm hover:shadow-md transition-shadow reveal" style="transition-delay: 300ms;">
+                   <h3 class="font-serif text-2xl text-sb-black mb-4">Posies & Baskets</h3>
+                   <p class="text-gray-500 font-light mb-4">Smaller, thoughtful arrangements perfect for family members to contribute or for grave-side placement.</p>
+                   <span class="text-sb-gold text-xs tracking-widest uppercase font-bold">From £45</span>
+               </div>
+               <div class="bg-white p-8 shadow-sm hover:shadow-md transition-shadow reveal" style="transition-delay: 400ms;">
+                   <h3 class="font-serif text-2xl text-sb-black mb-4">Bespoke Tributes</h3>
+                   <p class="text-gray-500 font-light mb-4">Letters (MUM, DAD), or custom shapes that reflect the personality and hobbies of the departed.</p>
+                   <span class="text-sb-gold text-xs tracking-widest uppercase font-bold">POA</span>
+               </div>
+           </div>
+          <div class="text-center reveal">
+               <a href="/contact" class="btn-luxury border border-sb-black text-sb-black px-10 py-3 uppercase tracking-luxury text-xs font-bold inline-block">Contact Us</a>
+          </div>
+      </div>
+  </section>
+</Layout>
