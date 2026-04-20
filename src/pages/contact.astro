@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Contact Us" 
+  description="Get in touch with SB Floristry for bespoke arrangements, events, and weddings."
+>
+  <section class="pt-40 pb-20 bg-sb-black text-center text-sb-cream transition-colors duration-500">
+      <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-4 block">Get in Touch</span>
+      <h1 class="font-serif text-5xl md:text-7xl mb-12 font-light">Contact Us</h1>
+      
+      <div class="flex flex-col md:flex-row justify-center gap-12 mb-16 text-lg font-light tracking-wide reveal">
+          <div>
+              <i class="fas fa-phone text-sb-gold mb-4 text-2xl block"></i>
+              <p class="text-xs uppercase tracking-luxury text-gray-500 mb-2">Telephone</p>
+              <a href="tel:01708956609" class="hover:text-sb-gold transition-colors text-white">01708 956609</a>
+          </div>
+          <div>
+              <i class="fas fa-envelope text-sb-gold mb-4 text-2xl block"></i>
+              <p class="text-xs uppercase tracking-luxury text-gray-500 mb-2">Email</p>
+              <a href="mailto:info@sbfloristry.co.uk" class="hover:text-sb-gold transition-colors text-white">info@sbfloristry.co.uk</a>
+          </div>
+      </div>
+  </section>
+
+  <section class="pb-24 bg-sb-black text-sb-cream border-t border-white/5 transition-colors duration-500">
+      <div class="container mx-auto px-6 max-w-4xl">
+          <form class="space-y-8 reveal" action="#" method="POST">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Name</label>
+                      <input type="text" name="name" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
+                  </div>
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Email</label>
+                      <input type="email" name="email" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base">
+                  </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Event Date (Optional)</label>
+                      <input type="date" name="date" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-gray-400 text-base">
+                  </div>
+                  <div class="space-y-1">
+                      <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Interest</label>
+                      <select name="interest" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream text-base">
+                          <option value="General Inquiry" class="bg-sb-black">General Inquiry</option>
+                          <option value="Weddings" class="bg-sb-black">Weddings</option>
+                          <option value="Events" class="bg-sb-black">Events</option>
+                          <option value="Hotels" class="bg-sb-black">Hotels & Spas</option>
+                          <option value="Bespoke Order" class="bg-sb-black">Bespoke Order</option>
+                      </select>
+                  </div>
+              </div>
+              <div class="space-y-1">
+                  <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Message</label>
+                  <textarea name="message" rows="4" required class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream placeholder-gray-600 text-base"></textarea>
+              </div>
+              <div class="text-center pt-8">
+                  <button type="submit" class="btn-luxury border border-sb-cream text-sb-cream px-16 py-4 uppercase tracking-luxury text-xs font-bold inline-block">
+                      Send Inquiry
+                  </button>
+              </div>
+          </form>
+      </div>
+  </section>
+</Layout>
