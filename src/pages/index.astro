@@ -1,9 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Testimonials from '../components/Testimonials.astro';
 import { shopifyFetch } from '../utils/shopify.js';
 
 // 1. Fetch images for the "Explore Our Collections" grid
-// This perfectly mirrors the Javascript from your original index.html!
 const targetTags = ['seasonal', 'luxury', 'gothic', 'fairytale'];
 
 const queryBody = targetTags.map(tag => `
@@ -20,13 +20,11 @@ const query = `{ ${queryBody} }`;
 const response = await shopifyFetch({ query });
 const collectionsData = response?.data || {};
 
-// Format the data into collection cards
 const collectionCards = targetTags.map(tag => {
   const products = collectionsData[tag]?.edges || [];
   const validProducts = products.filter(p => p.node?.images?.edges?.length > 0);
   let imgSrc = 'https://via.placeholder.com/600x800?text=Coming+Soon';
   
-  // Grab the first valid product image to use as the background
   if (validProducts.length > 0) {
     imgSrc = validProducts[0].node.images.edges[0].node.url;
   }
@@ -48,7 +46,8 @@ const collectionCards = targetTags.map(tag => {
   <section class="relative h-[90vh] overflow-hidden">
       <div class="absolute inset-0">
           <img src="/images/hero.jpg" alt="Luxury Bouquet" class="w-full h-full object-cover hero-zoom opacity-90" style="object-position: center 60%;">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30"></div>
+          <div class="absolute inset-0 bg-black/50"></div>
+          <div class="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-sb-black to-transparent"></div>
       </div>
       <div class="relative z-10 container mx-auto px-6 h-full flex flex-col justify-center items-center text-center text-sb-cream pt-20">
           <h2 class="text-xs md:text-sm tracking-[0.3em] uppercase mb-8 font-medium text-sb-gold animate-fade-in">Hand-Tied in Essex • Delivered to London</h2>
@@ -61,11 +60,11 @@ const collectionCards = targetTags.map(tag => {
       </div>
   </section>
   
-  <!-- 2. A FAMILY AFFAIR SECTION -->
+  <!-- 2. A FAMILY AFFAIR -->
   <section class="py-24 bg-sb-black text-sb-cream relative border-t border-white/5">
       <div class="container mx-auto px-6 text-center max-w-2xl">
           <span class="text-gold-metallic text-2xl mb-6 block reveal"><i class="fas fa-leaf"></i></span>
-          <h2 class="font-serif text-4xl md:text-5xl text-sb-cream mb-8 reveal font-light">A Family Affair</h2>
+          <h2 class="font-serif text-4xl md:text-5xl text-sb-cream mb-8 reveal font-light text-shadow-sm">A Family Affair</h2>
           <p class="text-gray-400 leading-relaxed text-xl font-light mb-12 reveal">
               Welcome to SB Floristry. We are a mother and daughter team bringing bespoke, luxury floral design to weddings, events, and homes across Essex and London. Every arrangement is hand-selected and styled with the care only family can provide.
           </p>
@@ -76,7 +75,7 @@ const collectionCards = targetTags.map(tag => {
       </div>
   </section>
 
-  <!-- 3. EXPLORE OUR COLLECTIONS GRID (Mirrors your index.html exactly) -->
+  <!-- 3. EXPLORE COLLECTIONS -->
   <section class="py-24 bg-sb-cream">
     <div class="container mx-auto px-6">
         <div class="text-center mb-16 reveal">
@@ -99,7 +98,28 @@ const collectionCards = targetTags.map(tag => {
     </div>
   </section>
 
-  <!-- 4. GLOBAL CONTACT FOOTER (From your original index.html) -->
+  <!-- 4. TESTIMONIALS SECTION (NEW) -->
+  <Testimonials />
+
+  <!-- 5. OCCASION REMINDER / NEWSLETTER (NEW) -->
+  <section class="py-24 bg-sb-cream border-t border-gray-100">
+      <div class="container mx-auto px-6">
+          <div class="max-w-4xl mx-auto bg-sb-black p-12 md:p-20 text-center relative overflow-hidden reveal">
+              <div class="absolute top-0 left-0 w-full h-1 bg-sb-gold"></div>
+              <span class="text-sb-gold text-xs tracking-[0.35em] uppercase font-bold mb-6 block">Never Miss a Moment</span>
+              <h3 class="font-serif text-4xl md:text-5xl text-sb-cream mb-8 font-light">The SB Occasion Reminder</h3>
+              <p class="text-gray-400 font-light text-lg mb-10 max-w-xl mx-auto">
+                  Tell us your most important dates—anniversaries, birthdays, milestones—and we'll send you a curated floral suggestion one week before.
+              </p>
+              <form class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+                  <input type="email" placeholder="Email Address" class="flex-grow bg-transparent border-b border-gray-700 py-3 text-sb-cream outline-none focus:border-sb-gold transition-colors font-light">
+                  <button type="submit" class="btn-luxury border border-sb-cream text-sb-cream px-8 py-3 uppercase tracking-luxury text-[10px] font-bold">Join The Service</button>
+              </form>
+          </div>
+      </div>
+  </section>
+
+  <!-- 6. GLOBAL CONTACT FOOTER -->
   <section class="py-24 bg-sb-black text-sb-cream border-t border-white/5" id="contact-section">
       <div class="container mx-auto px-6 max-w-4xl">
           <div class="text-center mb-12 reveal">
@@ -125,10 +145,10 @@ const collectionCards = targetTags.map(tag => {
                   <div class="space-y-1">
                       <label class="text-xs font-bold tracking-luxury uppercase text-sb-gold">Interest</label>
                       <select name="interest" class="w-full bg-transparent border-b border-gray-700 focus:border-sb-gold outline-none py-2 transition-colors text-sb-cream text-base">
-                          <option value="Weddings" class="bg-sb-black">Weddings</option>
-                          <option value="Events" class="bg-sb-black">Events</option>
-                          <option value="Hotels" class="bg-sb-black">Hotels & Spas</option>
-                          <option value="Bespoke Order" class="bg-sb-black">Bespoke Order</option>
+                          <option value="Weddings" class="bg-sb-black text-white">Weddings</option>
+                          <option value="Events" class="bg-sb-black text-white">Events</option>
+                          <option value="Hotels" class="bg-sb-black text-white">Hotels & Spas</option>
+                          <option value="Bespoke Order" class="bg-sb-black text-white">Bespoke Order</option>
                       </select>
                   </div>
               </div>
