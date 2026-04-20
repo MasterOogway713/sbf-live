@@ -1,80 +1,46 @@
----
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import CartModal from '../components/CartModal.astro';
-import { ViewTransitions } from 'astro:transitions';
-
-const { title, description } = Astro.props;
----
-
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title} | SB Floristry</title>
-    <meta name="description" content={description}>
-    
-    <!-- This tag enables the luxury SPA-like crossfades between pages -->
-    <ViewTransitions />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <style is:global>
-        :root {
-            --sb-gold: #D4AF37;
-            --sb-cream: #F9F8F6;
-            --sb-black: #0a0a0a;
-            --sb-dark: #1A1A1A;
-        }
-        
-        /* Typography */
-        .font-serif { font-family: 'Playfair Display', serif; }
-        .font-sans { font-family: 'Lato', sans-serif; }
-
-        /* Custom Animations */
-        .hero-zoom { animation: slowZoom 25s infinite alternate; }
-        @keyframes slowZoom { from { transform: scale(1); } to { transform: scale(1.05); } }
-
-        .text-gold-metallic {
-            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-
-        .bg-gold-shimmer {
-            background: linear-gradient(90deg, #997b3a 0%, #b89546 25%, #D4AF37 50%, #b89546 75%, #997b3a 100%);
-            background-size: 200% auto; animation: subtleShimmer 8s linear infinite;
-        }
-        @keyframes subtleShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
-
-        /* Scroll Reveal Engine */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        
-        img { opacity: 0; transition: opacity 1.2s ease-out; }
-        img.loaded { opacity: 1; }
-        
-        /* Luxury Button Hover Effect */
-        .btn-luxury { position: relative; overflow: hidden; transition: color 0.4s; z-index: 1; }
-        .btn-luxury::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #D4AF37; z-index: -1; transform: scaleY(0); transform-origin: bottom;
-            transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-        .btn-luxury:hover::before { transform: scaleY(1); }
-        .btn-luxury:hover { color: #0a0a0a !important; border-color: #D4AF37; }
-    </style>
-</head>
-<body class="bg-[#F9F8F6] font-sans text-[#1A1A1A] flex flex-col min-h-screen">
-    
-    <Header />
-    
+<!-- ... existing code ... -->
     <main class="flex-grow transition-colors duration-500">
         <slot />
     </main>
+
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-6 right-6 z-[90] flex flex-col gap-4 items-end">
+        <!-- Delivery Checker -->
+        <div class="relative group flex items-center">
+            <!-- Temporary Tooltip Bubble -->
+            <div id="deliveryTooltip" class="absolute right-full mr-4 bg-sb-black text-sb-gold text-[10px] uppercase tracking-widest font-bold py-3 px-5 whitespace-nowrap shadow-2xl opacity-100 transition-opacity duration-1000 pointer-events-none rounded-sm">
+                Check Delivery Eligibility
+                <!-- Arrow pointing right -->
+                <div class="absolute top-1/2 -right-1.5 -translate-y-1/2 border-y-[6px] border-y-transparent border-l-[6px] border-l-sb-black"></div>
+            </div>
+            
+            <button id="openDeliveryModal" class="w-12 h-12 bg-sb-black text-sb-gold rounded-full shadow-2xl flex items-center justify-center border border-sb-gold/20 hover:bg-sb-gold hover:text-sb-black transition-colors duration-300 group focus:outline-none">
+                <i class="fas fa-truck text-lg"></i>
+            </button>
+        </div>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/441708956609" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-sb-black text-sb-gold rounded-full shadow-2xl flex items-center justify-center border border-sb-gold/20 hover:bg-sb-gold hover:text-sb-black transition-colors duration-300 focus:outline-none">
+            <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
+    </div>
+
+    <!-- Delivery Eligibility Modal -->
+    <div id="deliveryModal" class="fixed inset-0 bg-black/60 z-[100] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-sb-cream w-full max-w-md p-8 relative shadow-2xl transform scale-95 transition-transform duration-300" id="deliveryModalContent">
+            <button id="closeDeliveryModal" class="absolute top-4 right-4 text-gray-400 hover:text-sb-gold transition-colors focus:outline-none">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <h4 class="font-serif text-3xl text-sb-black mb-2">Delivery Check</h4>
+            <p class="text-xs text-gray-500 tracking-wider uppercase mb-6">Free delivery over £60 within our 3-mile Romford zone</p>
+            
+            <div class="flex flex-col gap-3">
+                <input type="text" id="modalPostcodeInput" placeholder="Enter Postcode (e.g. RM1)" class="w-full bg-white px-4 py-3 text-xs tracking-widest outline-none border border-gray-200 focus:border-sb-gold transition-colors uppercase text-center">
+                <button id="modalCheckPostcodeBtn" class="w-full bg-sb-black text-sb-gold px-6 py-3 text-[10px] font-bold tracking-luxury uppercase hover:bg-sb-gold hover:text-sb-black transition-colors focus:outline-none">Verify Postcode</button>
+            </div>
+            <div id="modalPostcodeResult" class="mt-4 text-center text-xs font-bold tracking-luxury hidden animate-fade-in min-h-[20px]"></div>
+        </div>
+    </div>
 
     <Footer />
     <CartModal />
@@ -82,192 +48,79 @@ const { title, description } = Astro.props;
     <script is:inline>
         // Use astro:page-load so the script re-runs after a view transition
         document.addEventListener('astro:page-load', () => {
-            // --- 1. ACTIVATION SCRIPT (FIXES THE WHITE SCREEN) ---
-            const observer = new IntersectionObserver((entries) => { 
-                entries.forEach(entry => { 
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active'); 
-                    }
-                }); 
-            }, { rootMargin: '100px', threshold: 0.1 });
-            
-            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-
-            document.querySelectorAll('img').forEach(img => {
-                if (img.complete) img.classList.add('loaded');
-                else img.addEventListener('load', () => img.classList.add('loaded'));
-            });
-
-            // --- 2. CART STATE LOGIC ---
-            let cart = JSON.parse(localStorage.getItem('sb_cart')) || [];
-            
-            // FIX: Clear out any broken "undefined" items from your previous tests!
-            cart = cart.filter(i => i.id && String(i.id) !== 'undefined');
-
-            const updateUI = () => {
-                const container = document.getElementById('cartItemsContainer');
-                const count = document.getElementById('cartCount');
-                const subtotal = document.getElementById('cartSubtotal');
-                const totalQty = cart.reduce((s, i) => s + i.quantity, 0);
-                
-                if (count) {
-                    count.textContent = totalQty;
-                    count.classList.toggle('hidden', totalQty === 0);
-                }
-
-                if (container) {
-                    if (cart.length === 0) {
-                        container.innerHTML = `<div class="text-center text-gray-500 mt-10 font-serif italic">Your cart is currently empty.</div>`;
-                    } else {
-                        container.innerHTML = cart.map((item, idx) => `
-                            <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
-                                <!-- FIX: Added style="opacity: 1 !important" to bypass the global image hiding CSS -->
-                                <img src="${item.image}" class="w-16 h-20 object-cover loaded" style="opacity: 1 !important;" alt="${item.title}">
-                                <div class="flex-grow">
-                                    <h4 class="font-serif text-base text-sb-black">${item.title}</h4>
-                                    <p class="text-sb-gold text-xs">£${parseFloat(item.price).toFixed(2)}</p>
-                                    <div class="flex items-center mt-2 border border-gray-200 w-max bg-white">
-                                        <button class="px-2 py-0.5 text-[10px] decrease-qty" data-idx="${idx}">-</button>
-                                        <span class="px-2 py-0.5 text-[10px] border-x border-gray-200">${item.quantity}</span>
-                                        <button class="px-2 py-0.5 text-[10px] increase-qty" data-idx="${idx}">+</button>
-                                    </div>
-                                </div>
-                                <button class="text-gray-300 hover:text-red-400 remove-item" data-idx="${idx}">
-                                    <i class="fas fa-trash-alt text-[10px]"></i>
-                                </button>
-                            </div>
-                        `).join('');
-                    }
-                }
-
-                const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
-                if (subtotal) subtotal.textContent = `£${total.toFixed(2)}`;
-                
-                // --- NEW: Delivery Progress Bar Logic ---
-                const freeDeliveryThreshold = 60;
-                const progressContainer = document.getElementById('deliveryProgressContainer');
-                const progressText = document.getElementById('deliveryProgressText');
-                const progressBar = document.getElementById('deliveryProgressBar');
-                const amountNeeded = document.getElementById('deliveryAmountNeeded');
-                
-                if (progressContainer && progressBar && progressText) {
-                    progressContainer.classList.remove('hidden');
-                    if (total >= freeDeliveryThreshold) {
-                        progressText.innerHTML = `<i class="fas fa-check-circle mr-1"></i> You've unlocked Free Local Delivery!`;
-                        progressBar.style.width = '100%';
-                    } else {
-                        const remaining = (freeDeliveryThreshold - total).toFixed(2);
-                        if(amountNeeded) amountNeeded.textContent = remaining;
-                        progressText.innerHTML = `Spend £<span id="deliveryAmountNeeded">${remaining}</span> more for Free Local Delivery`;
-                        progressBar.style.width = `${(total / freeDeliveryThreshold) * 100}%`;
-                    }
-                    // Hide the bar completely if the cart is completely empty
-                    if (total === 0) progressContainer.classList.add('hidden');
-                }
-
-                localStorage.setItem('sb_cart', JSON.stringify(cart));
-            };
-
-            // Listeners for Cart
-            document.addEventListener('click', (e) => {
-                const addBtn = e.target.closest('.add-to-cart-btn');
-                if (addBtn) {
-                    const id = addBtn.dataset.id;
-                    const exists = cart.find(i => i.id === id);
-                    if (exists) { exists.quantity++; } 
-                    else {
-                        cart.push({
-                            id: id,
-                            title: addBtn.dataset.title,
-                            price: addBtn.dataset.price,
-                            image: addBtn.dataset.image,
-                            quantity: 1
-                        });
-                    }
-                    updateUI();
-                    toggleCart(true);
-                }
-
-                if (e.target.closest('.remove-item')) {
-                    cart.splice(e.target.closest('.remove-item').dataset.idx, 1);
-                    updateUI();
-                }
-
-                if (e.target.closest('.increase-qty')) {
-                    cart[e.target.closest('.increase-qty').dataset.idx].quantity++;
-                    updateUI();
-                }
-
-                if (e.target.closest('.decrease-qty')) {
-                    const i = e.target.closest('.decrease-qty').dataset.idx;
-                    if (cart[i].quantity > 1) cart[i].quantity--;
-                    updateUI();
-                }
-
-                // --- UPDATED: Checkout logic to include Date & Message ---
-                if (e.target.closest('#checkoutBtn')) {
-                    
-                    if (cart.length === 0) {
-                        alert("Your basket is currently empty! Add some beautiful blooms before checking out.");
-                        return;
-                    }
-
-                    // FIX: Decode Shopify Base64 IDs to retrieve the Numeric Variant ID!
-                    const items = cart.map(i => {
-                        let numericId = String(i.id);
-                        try {
-                            if (!numericId.includes('gid://')) {
-                                numericId = atob(numericId); // Decodes the Base64 String
-                            }
-                            numericId = numericId.split('/').pop(); // Grabs the number
-                        } catch(err) {
-                            numericId = numericId.split('/').pop(); // Fallback
-                        }
-                        return `${numericId}:${i.quantity}`;
-                    }).join(',');
-                    
-                    const giftMessage = document.getElementById('cartGiftMessage')?.value || '';
-                    const deliveryDate = document.getElementById('cartDeliveryDate')?.value || '';
-                    
-                    let checkoutUrl = `https://sb-floristry.myshopify.com/cart/${items}`;
-                    const params = new URLSearchParams();
-                    
-                    if (giftMessage) params.append('note', `Gift Message: ${giftMessage}`);
-                    if (deliveryDate) params.append('attributes[Delivery Date]', deliveryDate);
-                    
-                    const queryString = params.toString();
-                    if (queryString) {
-                        checkoutUrl += `?${queryString}`;
-                    }
-                    
-                    window.location.href = checkoutUrl;
-                }
-            });
-
-            // UI Helpers
-            const sidebar = document.getElementById('cartSidebar');
-            const overlay = document.getElementById('cartOverlay');
-            
-            function toggleCart(forceOpen = false) {
-                const isOpen = !sidebar?.classList.contains('translate-x-full');
-                if (forceOpen || !isOpen) {
-                    sidebar?.classList.remove('translate-x-full');
-                    overlay?.classList.remove('hidden');
-                    setTimeout(() => overlay?.classList.remove('opacity-0'), 10);
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    sidebar?.classList.add('translate-x-full');
-                    overlay?.classList.add('opacity-0');
-                    setTimeout(() => overlay?.classList.add('hidden'), 300);
-                    document.body.style.overflow = '';
-                }
-            }
-
-            document.getElementById('cartBtn')?.addEventListener('click', () => toggleCart());
+<!-- ... existing code ... -->
             document.getElementById('closeCartBtn')?.addEventListener('click', () => toggleCart());
             overlay?.addEventListener('click', () => toggleCart());
 
             updateUI();
+
+            // --- 3. FLOATING ACTION BUTTONS LOGIC ---
+            const tooltip = document.getElementById('deliveryTooltip');
+            if (tooltip) {
+                // Fade out after 5 seconds to draw attention without being annoying
+                setTimeout(() => {
+                    tooltip.classList.remove('opacity-100');
+                    tooltip.classList.add('opacity-0');
+                }, 5000);
+            }
+
+            const dModal = document.getElementById('deliveryModal');
+            const dModalContent = document.getElementById('deliveryModalContent');
+            const openDModalBtn = document.getElementById('openDeliveryModal');
+            const closeDModalBtn = document.getElementById('closeDeliveryModal');
+            
+            function toggleDeliveryModal(show) {
+                if (!dModal) return;
+                if (show) {
+                    dModal.classList.remove('hidden');
+                    // Hide tooltip immediately when clicked
+                    if (tooltip) {
+                        tooltip.classList.remove('opacity-100');
+                        tooltip.classList.add('opacity-0');
+                    }
+                    setTimeout(() => {
+                        dModal.classList.remove('opacity-0');
+                        dModalContent?.classList.remove('scale-95');
+                        dModalContent?.classList.add('scale-100');
+                    }, 10);
+                } else {
+                    dModal.classList.add('opacity-0');
+                    dModalContent?.classList.remove('scale-100');
+                    dModalContent?.classList.add('scale-95');
+                    setTimeout(() => {
+                        dModal.classList.add('hidden');
+                    }, 300);
+                }
+            }
+
+            openDModalBtn?.addEventListener('click', () => toggleDeliveryModal(true));
+            closeDModalBtn?.addEventListener('click', () => toggleDeliveryModal(false));
+            dModal?.addEventListener('click', (e) => {
+                // Close if clicking outside the modal content
+                if (e.target === dModal) toggleDeliveryModal(false);
+            });
+
+            const modalBtn = document.getElementById('modalCheckPostcodeBtn');
+            const modalInput = document.getElementById('modalPostcodeInput');
+            const modalResult = document.getElementById('modalPostcodeResult');
+            // Your store's qualifying postcodes
+            const validPrefixes = ['RM1', 'RM2', 'RM3', 'RM7', 'RM11', 'RM12'];
+
+            modalBtn?.addEventListener('click', () => {
+                const val = modalInput?.value.trim().toUpperCase();
+                if (!val) return;
+                modalResult?.classList.remove('hidden');
+                
+                const isLocal = validPrefixes.some(p => val.startsWith(p));
+                
+                if (isLocal && modalResult) {
+                    modalResult.className = "mt-4 text-center text-xs font-bold tracking-luxury text-green-600 animate-fade-in";
+                    modalResult.innerHTML = `<i class="fas fa-check-circle mr-2"></i> You are within our Free Delivery zone!`;
+                } else if (modalResult) {
+                    modalResult.className = "mt-4 text-center text-xs font-bold tracking-luxury text-sb-gold animate-fade-in";
+                    modalResult.innerHTML = `<i class="fas fa-info-circle mr-2"></i> Standard UK Delivery (£4.99) applies to your area.`;
+                }
+            });
         });
     </script>
 </body>
