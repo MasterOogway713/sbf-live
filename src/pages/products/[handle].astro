@@ -1,0 +1,217 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { shopifyFetch } from '../../utils/shopify.js';
+
+export async function getStaticPaths() {
+  const query = `
+    {
+      products(first: 250) {
+        edges {
+          node {
+            id
+            title
+            handle
+            descriptionHtml
+            tags
+            images(first: 6) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  price {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  
+  const response = await shopifyFetch({ query });
+  const products = response?.data?.products?.edges || [];
+
+  return products.map((edge) => ({
+    params: { handle: edge.node.handle },
+    props: { product: edge.node },
+  }));
+}
+
+const { product } = Astro.props;
+
+// Extract necessary variables
+const variantId = product.variants?.edges[0]?.node?.id || product.id;
+const priceAmount = product.variants?.edges[0]?.node?.price?.amount || '0.00';
+const priceText = `£${parseFloat(priceAmount).toFixed(2)}`;
+const images = product.images?.edges.map(e => e.node.url) || [];
+const mainImage = images[0] || 'https://via.placeholder.com/600x800?text=No+Image';
+
+// Find collection tag for breadcrumbs
+const ignoredTags = ['subscription', 'bespoke', 'add-on', 'upsell', 'white', 'red', 'pink'];
+const collectionTag = product.tags.find((tag: string) => !ignoredTags.includes(tag.toLowerCase())) || 'seasonal';
+const displayCollection = collectionTag.charAt(0).toUpperCase() + collectionTag.slice(1);
+---
+
+<Layout title={`${product.title} | Luxury Essex Florist`} description={`Order the beautiful ${product.title} from SB Floristry. Hand-tied in Essex, delivered to London.`}>
+  
+  <section class="py-12 md:py-24 bg-sb-cream text-sb-black min-h-screen">
+    <div class="container mx-auto px-6 max-w-7xl">
+      
+      <!-- Breadcrumbs -->
+      <nav class="text-[10px] tracking-luxury uppercase font-bold text-gray-400 mb-8 md:mb-12 flex items-center space-x-2 reveal">
+        <a href="/" class="hover:text-sb-gold transition-colors">Home</a>
+        <span>/</span>
+        <a href={`/collections/${collectionTag.toLowerCase()}`} class="hover:text-sb-gold transition-colors">{displayCollection}</a>
+        <span>/</span>
+        <span class="text-sb-black">{product.title}</span>
+      </nav>
+
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+        
+        <!-- Left: Sticky Image Gallery -->
+        <div class="w-full lg:w-1/2 reveal">
+          <div class="lg:sticky lg:top-32 flex flex-col-reverse md:flex-row gap-4">
+            
+            <!-- Thumbnails -->
+            {images.length > 1 && (
+              <div class="flex md:flex-col gap-3 overflow-x-auto md:overflow-visible no-scrollbar w-full md:w-20 shrink-0">
+                {images.map((img, idx) => (
+                  <button class={`gallery-thumbnail w-20 h-24 md:w-full md:h-28 shrink-0 border-2 transition-colors duration-300 ${idx === 0 ? 'border-sb-gold' : 'border-transparent hover:border-gray-300'}`} data-full={img}>
+                    <img src={img} alt={`Thumbnail ${idx + 1}`} class="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            <!-- Main Image -->
+            <div class="w-full relative aspect-[4/5] bg-white border border-gray-100">
+              <img id="mainProductImage" src={mainImage} alt={product.title} class="w-full h-full object-cover loaded transition-opacity duration-500" />
+              <!-- Packaging Callout -->
+              <div class="absolute bottom-4 right-4 bg-sb-black text-sb-gold text-[9px] uppercase tracking-luxury font-bold py-2 px-4 shadow-xl">
+                Arrives in Signature Black & Gold Wrap
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <!-- Right: Product Information -->
+        <div class="w-full lg:w-1/2 reveal" style="transition-delay: 150ms;">
+          <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-3 block">SB Floristry Signature</span>
+          <h1 class="font-serif text-4xl md:text-5xl text-sb-black mb-4 font-light">{product.title}</h1>
+          <p class="text-xl font-light text-gray-500 mb-8">{priceText}</p>
+          
+          <!-- Add to Cart -->
+          <div class="mb-12 border-y border-gray-200 py-8">
+            <p class="text-xs text-gray-500 font-bold uppercase tracking-luxury mb-4"><i class="fas fa-truck mr-2 text-sb-gold"></i> Delivery available across Essex & London</p>
+            <button 
+              class="w-full bg-sb-black text-sb-gold py-4 font-bold tracking-luxury text-[11px] uppercase hover:bg-sb-gold hover:text-sb-black transition-colors duration-300 add-to-cart-btn shadow-xl"
+              data-id={variantId} 
+              data-title={product.title} 
+              data-price={priceAmount} 
+              data-image={mainImage}
+            >
+              Add to Basket — {priceText}
+            </button>
+          </div>
+
+          <!-- Product Description from Shopify -->
+          <div class="prose prose-sm prose-gray font-light leading-relaxed mb-10 max-w-none text-gray-600 product-desc" set:html={product.descriptionHtml}></div>
+
+          <!-- Farmgirl Style Details Accordions -->
+          <div class="border-t border-gray-200">
+            
+            <!-- Care Instructions -->
+            <div class="border-b border-gray-200">
+              <button class="accordion-btn w-full flex justify-between items-center py-5 text-xs font-bold tracking-luxury uppercase text-sb-black group focus:outline-none">
+                <span><i class="fas fa-tint text-sb-gold mr-3"></i> Care Instructions</span>
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold"></i>
+              </button>
+              <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300 ease-out">
+                <p class="pb-5 text-sm text-gray-500 font-light leading-relaxed">
+                  To ensure maximum longevity, trim stems by 1-2 inches at a 45-degree angle upon arrival. Place in a clean vase with fresh, cool water and the provided flower food. Change the water entirely every 2 days and keep away from direct sunlight or drafts.
+                </p>
+              </div>
+            </div>
+
+            <!-- Delivery & Returns -->
+            <div class="border-b border-gray-200">
+              <button class="accordion-btn w-full flex justify-between items-center py-5 text-xs font-bold tracking-luxury uppercase text-sb-black group focus:outline-none">
+                <span><i class="fas fa-box-open text-sb-gold mr-3"></i> Delivery Details</span>
+                <i class="fas fa-chevron-down text-[10px] transition-transform duration-300 group-hover:text-sb-gold"></i>
+              </button>
+              <div class="accordion-content max-h-0 overflow-hidden transition-all duration-300 ease-out">
+                <p class="pb-5 text-sm text-gray-500 font-light leading-relaxed">
+                  We offer <strong>Free Local Delivery</strong> on all orders over £60 within our 3-mile Essex radius. Standard UK Mainland delivery is £4.99. All bouquets are delivered in our signature aqua-pack for freshness during transit.
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    document.addEventListener('astro:page-load', () => {
+      // Image Gallery Logic
+      const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+      const mainImg = document.getElementById('mainProductImage');
+      
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', function() {
+          if (mainImg) mainImg.src = this.dataset.full;
+          thumbnails.forEach(t => t.classList.remove('border-sb-gold', 'border-transparent'));
+          thumbnails.forEach(t => t.classList.add('border-transparent'));
+          this.classList.remove('border-transparent');
+          this.classList.add('border-sb-gold');
+        });
+      });
+
+      // Accordion Logic
+      const accordions = document.querySelectorAll('.accordion-btn');
+      accordions.forEach(acc => {
+        acc.addEventListener('click', function() {
+          const content = this.nextElementSibling;
+          const icon = this.querySelector('.fa-chevron-down');
+          
+          if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            icon.classList.remove('rotate-180');
+          } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.classList.add('rotate-180');
+          }
+        });
+      });
+      
+      // Clean up Shopify's default HTML spacing issues if present
+      document.querySelectorAll('.product-desc p').forEach(p => {
+        if(p.innerHTML.trim() === '') p.style.display = 'none';
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+  /* Hide scrollbar for thumbnail gallery on mobile */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
