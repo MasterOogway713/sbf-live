@@ -38,79 +38,80 @@ const products = rawProducts.map(({ node }) => ({
   handle: node.handle,
   tags: node.tags.map(t => t.toLowerCase().trim()),
   price: parseFloat(node.priceRange.minVariantPrice.amount),
-  image: node.images.edges[0]?.node?.url || 'https://via.placeholder.com/400x500?text=No+Image'
+  // Add a reliable local fallback image just in case Shopify sends an empty/broken url
+  image: node.images.edges[0]?.node?.url || '/images/collection-signature.jpg'
 }));
 ---
 
 <Layout title="AI Gift Concierge | SB Floristry" description="Let our virtual floral concierge find the perfect luxury bouquet for your occasion.">
   <section class="min-h-screen bg-sb-cream flex items-center justify-center py-24 px-6">
     
-    <div class="max-w-4xl w-full bg-white border border-gray-200 shadow-2xl p-8 md:p-16 text-center relative overflow-hidden transition-all duration-700" id="quiz-container">
+    <div class="max-w-4xl w-full bg-white border border-gray-100 shadow-xl p-8 md:p-20 text-center relative overflow-hidden transition-all duration-1000" id="quiz-container">
       
       <!-- Progress Bar -->
-      <div class="absolute top-0 left-0 w-full h-1 bg-gray-100" id="progress-container">
-        <div class="h-full bg-sb-gold transition-all duration-500 w-0" id="progress-bar"></div>
+      <div class="absolute top-0 left-0 w-full h-1 bg-gray-50" id="progress-container">
+        <div class="h-full bg-sb-gold transition-all duration-1000 ease-in-out w-0" id="progress-bar"></div>
       </div>
 
       <!-- Step 1: Who is it for? -->
-      <div class="quiz-step active" id="step-1">
-        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-4 block"><i class="fas fa-sparkles mr-1"></i> Virtual Concierge</span>
-        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-8 font-light">Who are we spoiling today?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-2">My Partner</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-2">A Friend or Family</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-2">A Colleague / Client</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-2">Treating Myself</button>
+      <div class="quiz-step opacity-100 translate-y-0 transition-all duration-700 ease-out" id="step-1">
+        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-6 block"><i class="fas fa-sparkles mr-1"></i> Virtual Concierge</span>
+        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-10 font-light">Who are we spoiling today?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-2">My Partner</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-2">A Friend or Family</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-2">A Colleague / Client</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-2">Treating Myself</button>
         </div>
       </div>
 
       <!-- Step 2: What's the vibe? -->
-      <div class="quiz-step hidden" id="step-2">
-        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-4 block">Step 2 of 3</span>
-        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-8 font-light">What's the overall vibe?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-3" data-tag="signature">Romantic & Deep</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-3" data-tag="seasonal">Bright & Fresh</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-3" data-tag="signature">Classic & Elegant</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg" data-next="step-3" data-tag="sympathy">Soft & Gentle</button>
+      <div class="quiz-step hidden opacity-0 translate-y-4 transition-all duration-700 ease-out" id="step-2">
+        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-6 block">Step 2 of 3</span>
+        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-10 font-light">What's the overall vibe?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-3" data-tag="signature">Romantic & Deep</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-3" data-tag="seasonal">Bright & Fresh</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-3" data-tag="signature">Classic & Elegant</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg" data-next="step-3" data-tag="sympathy">Soft & Gentle</button>
         </div>
       </div>
 
       <!-- Step 3: Budget -->
-      <div class="quiz-step hidden" id="step-3">
-        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-4 block">Step 3 of 3</span>
-        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-8 font-light">What is your price range?</h2>
-        <div class="flex flex-col gap-4 max-w-md mx-auto">
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg finish-quiz" data-min="0" data-max="60">£40 - £60</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg finish-quiz" data-min="61" data-max="99">£60 - £100</button>
-          <button class="quiz-btn border border-gray-200 py-5 px-6 hover:border-sb-gold hover:bg-gray-50 transition-all text-sb-black font-light text-lg finish-quiz" data-min="100" data-max="999">£100+ (Showstopper)</button>
+      <div class="quiz-step hidden opacity-0 translate-y-4 transition-all duration-700 ease-out" id="step-3">
+        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-6 block">Step 3 of 3</span>
+        <h2 class="font-serif text-3xl md:text-5xl text-sb-black mb-10 font-light">What is your price range?</h2>
+        <div class="flex flex-col gap-5 max-w-md mx-auto">
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg finish-quiz" data-min="0" data-max="60">£40 - £60</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg finish-quiz" data-min="61" data-max="99">£60 - £100</button>
+          <button class="quiz-btn border border-gray-100 py-6 px-6 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-lg finish-quiz" data-min="100" data-max="999">£100+ (Showstopper)</button>
         </div>
       </div>
 
       <!-- Loading / "AI" State -->
-      <div class="quiz-step hidden py-12" id="step-loading">
-        <div class="relative w-16 h-16 mx-auto mb-8">
-            <div class="absolute inset-0 border-2 border-gray-100 rounded-full"></div>
-            <div class="absolute inset-0 border-2 border-sb-gold rounded-full border-t-transparent animate-spin"></div>
-            <i class="fas fa-sparkles absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sb-gold"></i>
+      <div class="quiz-step hidden opacity-0 translate-y-4 transition-all duration-1000 ease-out py-16" id="step-loading">
+        <div class="relative w-16 h-16 mx-auto mb-10">
+            <div class="absolute inset-0 border border-gray-100 rounded-full"></div>
+            <div class="absolute inset-0 border border-sb-gold rounded-full border-t-transparent animate-[spin_2.5s_linear_infinite]"></div>
+            <i class="fas fa-sparkles absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sb-gold text-lg"></i>
         </div>
-        <h2 class="font-serif text-2xl md:text-3xl text-sb-black mb-2 font-light" id="ai-loading-text">Analyzing floral profiles...</h2>
+        <h2 class="font-serif text-2xl md:text-3xl text-sb-black mb-4 font-light transition-opacity duration-1000 ease-in-out" id="ai-loading-text">Analyzing floral profiles...</h2>
         <p class="text-gray-400 text-sm font-light">Our concierge is reviewing the current season's stems.</p>
       </div>
 
       <!-- Final Results State -->
-      <div class="quiz-step hidden text-left" id="step-results">
-        <div class="text-center mb-12">
+      <div class="quiz-step hidden opacity-0 translate-y-4 transition-all duration-1000 ease-out text-left" id="step-results">
+        <div class="text-center mb-16">
             <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-4 block"><i class="fas fa-check text-sb-gold mr-1"></i> Matches Found</span>
-            <h2 class="font-serif text-4xl text-sb-black font-light">Your Curated Selections</h2>
+            <h2 class="font-serif text-4xl md:text-5xl text-sb-black font-light">Your Curated Selections</h2>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12" id="results-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16" id="results-grid">
             <!-- Products injected here via JS -->
         </div>
 
-        <div class="text-center mt-12 pt-8 border-t border-gray-100">
-            <button onclick="window.location.reload()" class="text-gray-400 hover:text-sb-gold text-xs tracking-luxury uppercase font-bold transition-colors"><i class="fas fa-redo mr-2"></i> Start Over</button>
+        <div class="text-center mt-16 pt-10 border-t border-gray-100">
+            <button onclick="window.location.reload()" class="text-gray-400 hover:text-sb-gold text-xs tracking-luxury uppercase font-bold transition-colors duration-300"><i class="fas fa-redo mr-2"></i> Start Over</button>
         </div>
       </div>
 
@@ -129,10 +130,10 @@ const products = rawProducts.map(({ node }) => ({
       // User Selections
       let userPreferences = { tag: 'seasonal', min: 0, max: 999 };
 
-      // AI Animation text array
+      // Elegant loading phrases
       const loadingPhrases = [
           "Analyzing floral profiles...",
-          "Checking seasonal availability in Essex...",
+          "Evaluating seasonal availability...",
           "Curating your perfect match...",
           "Finalizing bespoke recommendations..."
       ];
@@ -142,14 +143,44 @@ const products = rawProducts.map(({ node }) => ({
       if(!productsDataEl) return;
       const allProducts = JSON.parse(productsDataEl.innerHTML);
 
-      // Start the progress bar slightly visible
-      setTimeout(() => { if(progressBar) progressBar.style.width = '33%'; }, 100);
+      // Start the progress bar gently
+      setTimeout(() => { if(progressBar) progressBar.style.width = '33%'; }, 300);
+
+      // --- ELEGANT TRANSITION FUNCTION ---
+      function transitionToNextStep(hideId, showId, newProgress) {
+          const hideEl = document.getElementById(hideId);
+          const showEl = document.getElementById(showId);
+          
+          // 1. Smoothly fade out current step
+          hideEl.classList.remove('opacity-100', 'translate-y-0');
+          hideEl.classList.add('opacity-0', '-translate-y-4'); // Glide up and out
+          
+          if(progressBar && newProgress) progressBar.style.width = newProgress;
+
+          // 2. Wait for fade out to complete, then swap elements
+          setTimeout(() => {
+              hideEl.classList.add('hidden');
+              // Reset hidden element's position for potential re-use
+              hideEl.classList.remove('-translate-y-4');
+              hideEl.classList.add('translate-y-4');
+              
+              showEl.classList.remove('hidden');
+              
+              // Force browser to acknowledge the element is visible before fading in
+              void showEl.offsetWidth;
+              
+              // 3. Smoothly fade in new step
+              showEl.classList.remove('opacity-0', 'translate-y-4');
+              showEl.classList.add('opacity-100', 'translate-y-0');
+          }, 600); // 600ms elegant delay
+      }
 
       buttons.forEach(btn => {
         btn.addEventListener('click', (e) => {
           const clicked = e.currentTarget;
+          const currentStepId = clicked.closest('.quiz-step').id;
           
-          // Save preferences as we go
+          // Save preferences
           if(clicked.dataset.tag) userPreferences.tag = clicked.dataset.tag;
           if(clicked.dataset.min) {
               userPreferences.min = parseInt(clicked.dataset.min);
@@ -158,27 +189,27 @@ const products = rawProducts.map(({ node }) => ({
 
           // Handle Final Step
           if (clicked.classList.contains('finish-quiz')) {
-            document.getElementById('step-3').classList.add('hidden');
-            document.getElementById('step-loading').classList.remove('hidden');
-            progressBar.style.width = '100%';
+            transitionToNextStep('step-3', 'step-loading', '100%');
             
-            // Run the "AI" text animation
+            // Run text animation at a slower, more luxurious pace
             let phraseIndex = 0;
             const textElement = document.getElementById('ai-loading-text');
             
             const interval = setInterval(() => {
                 phraseIndex++;
                 if(phraseIndex < loadingPhrases.length) {
-                    textElement.style.opacity = 0;
+                    textElement.style.opacity = '0'; // Fade out
                     setTimeout(() => {
                         textElement.innerText = loadingPhrases[phraseIndex];
-                        textElement.style.opacity = 1;
-                    }, 300);
+                        textElement.style.opacity = '1'; // Fade in gently
+                    }, 1000); // Wait a full second before showing new text
                 } else {
                     clearInterval(interval);
-                    showResults();
+                    // Fade to results gracefully
+                    transitionToNextStep('step-loading', 'step-results', null);
+                    setTimeout(showResults, 600);
                 }
-            }, 1200); // Change text every 1.2s
+            }, 2600); // 2.6 seconds per phrase
 
             return;
           }
@@ -186,73 +217,69 @@ const products = rawProducts.map(({ node }) => ({
           // Handle Normal Steps
           const nextStepId = clicked.dataset.next;
           if (nextStepId) {
-            document.querySelectorAll('.quiz-step').forEach(step => step.classList.add('hidden'));
-            document.getElementById(nextStepId).classList.remove('hidden');
+            let progress = '33%';
+            if (nextStepId === 'step-2') progress = '66%';
+            if (nextStepId === 'step-3') progress = '90%';
             
-            if (nextStepId === 'step-2') progressBar.style.width = '66%';
-            if (nextStepId === 'step-3') progressBar.style.width = '95%'; // Almost there!
+            transitionToNextStep(currentStepId, nextStepId, progress);
           }
         });
       });
 
       function showResults() {
-          // 1. Filter products by tag and price
           let exactMatches = allProducts.filter(p => 
               p.tags.includes(userPreferences.tag) && 
               p.price >= userPreferences.min && 
               p.price <= userPreferences.max
           );
 
-          // Fallback: If no exact match (e.g. they want Signature but budget is £40), drop the price constraint
           if(exactMatches.length === 0) {
               exactMatches = allProducts.filter(p => p.tags.includes(userPreferences.tag));
           }
-          // Ultimate Fallback: Just show random products
           if(exactMatches.length === 0) exactMatches = allProducts;
 
-          // Find the "Perfect Match"
           const perfectMatch = exactMatches[0];
 
-          // 2. Find the Upsell (Ladder trick)
-          // Find a product in the same tag category that costs MORE than the perfect match
           let upsellMatches = allProducts.filter(p => 
               p.tags.includes(userPreferences.tag) && 
               p.price > perfectMatch.price &&
               p.handle !== perfectMatch.handle
           );
           
-          // If no natural upsell exists, just grab the most expensive item
           const upsellMatch = upsellMatches.length > 0 ? upsellMatches[0] : allProducts.sort((a,b) => b.price - a.price).find(p => p.handle !== perfectMatch.handle);
 
-          // 3. Render HTML
           const grid = document.getElementById('results-grid');
-          grid.innerHTML = ''; // clear
+          grid.innerHTML = ''; 
           
           if(perfectMatch) grid.innerHTML += createProductHTML(perfectMatch, "The Perfect Match");
           if(upsellMatch) grid.innerHTML += createProductHTML(upsellMatch, "The Showstopper Upgrade", true);
 
-          // Hide loading, show results, hide progress bar
-          document.getElementById('step-loading').classList.add('hidden');
-          document.getElementById('step-results').classList.remove('hidden');
           progressContainer.classList.add('hidden');
       }
 
       function createProductHTML(product, label, isUpsell = false) {
           const badgeClass = isUpsell ? "bg-sb-black text-sb-gold" : "bg-sb-gold text-sb-black";
+          
+          // Added onerror handler to ensure images never break and added a light gray background fallback
           return `
-            <div class="group relative flex flex-col h-full bg-white border border-gray-100 p-4 hover:shadow-xl transition-shadow">
-                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 ${badgeClass} text-[9px] uppercase tracking-luxury font-bold px-4 py-1 z-10 whitespace-nowrap shadow-sm">
+            <div class="group relative flex flex-col h-full bg-white border border-gray-100 p-6 lg:p-8 hover:shadow-2xl transition-all duration-700 ease-out rounded-sm">
+                <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 ${badgeClass} text-[9px] uppercase tracking-luxury font-bold px-6 py-1.5 z-10 whitespace-nowrap shadow-sm">
                     ${label}
                 </div>
-                <div class="relative aspect-[4/5] overflow-hidden mb-6 mt-2">
-                    <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div class="relative aspect-[4/5] overflow-hidden mb-8 mt-2 bg-gray-50">
+                    <img 
+                        src="${product.image}" 
+                        alt="${product.title}" 
+                        class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000 ease-out" 
+                        onerror="this.onerror=null; this.src='/images/collection-signature.jpg';"
+                    />
                 </div>
                 <div class="text-center flex-grow flex flex-col justify-between">
                     <div>
-                        <h4 class="font-serif text-2xl text-sb-black mb-2">${product.title}</h4>
-                        <p class="text-gray-500 mb-6 font-medium">£${product.price.toFixed(2)}</p>
+                        <h4 class="font-serif text-3xl text-sb-black mb-3">${product.title}</h4>
+                        <p class="text-gray-500 mb-8 font-light text-lg">£${product.price.toFixed(2)}</p>
                     </div>
-                    <a href="/products/${product.handle}" class="block w-full border border-sb-black text-sb-black py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors">
+                    <a href="/products/${product.handle}" class="block w-full border border-gray-200 text-sb-black py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-black hover:text-sb-gold hover:border-sb-black transition-all duration-500">
                         View Details
                     </a>
                 </div>
