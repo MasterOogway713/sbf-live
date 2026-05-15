@@ -218,17 +218,22 @@ const displayCollection = collectionTag.charAt(0).toUpperCase() + collectionTag.
           const val = input.value.trim().toUpperCase();
           if (!val) return;
           
-          // Check for standard Essex/London prefixes (you can adjust this array)
-          const validPrefixes = ['RM', 'IG', 'E', 'CM', 'SS', 'N', 'NW', 'W', 'SW', 'SE', 'EC', 'WC', 'EN', 'DA'];
-          const isValid = validPrefixes.some(prefix => val.startsWith(prefix));
+          // Specific allowed districts
+          const validDistricts = ['RM1', 'RM11', 'RM12', 'RM2', 'RM3', 'RM4', 'RM5', 'RM7', 'CM13', 'CM14', 'CM15'];
+          
+          // Extract just the outward code (e.g., RM1, CM13) regardless of spaces
+          const districtMatch = val.replace(/\s+/g, '').match(/^([A-Z]{1,2}\d{1,2})/);
+          const district = districtMatch ? districtMatch[1] : '';
+          
+          const isValid = validDistricts.includes(district);
           
           result.classList.remove('hidden', 'text-green-600', 'text-red-500');
           
           if (isValid) {
-            result.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Great news! We deliver to this postcode. Order before 2PM for next-day delivery.';
+            result.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Great news! We offer local delivery to this area.';
             result.classList.add('text-green-600');
           } else {
-            result.innerHTML = '<i class="fas fa-info-circle mr-1"></i> We currently only offer local delivery to Essex and London postcodes. Nationwide delivery coming soon!';
+            result.innerHTML = '<i class="fas fa-info-circle mr-1"></i> We currently only offer local delivery to specific Essex postcodes. Nationwide delivery coming soon!';
             result.classList.add('text-red-500');
           }
         });
