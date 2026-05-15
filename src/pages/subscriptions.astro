@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Floral Subscriptions & Gifting | SB Floristry" description="Subscribe to regular luxury flower deliveries in Essex, or use our Set and Forget service for yearly occasions.">
+  
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-20 bg-sb-black text-sb-cream overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-40">
+      <img src="/images/collection-signature.jpg" alt="Subscription Flowers" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+    <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center reveal">
+      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Recurring Luxury</span>
+      <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light">The SB Subscription</h1>
+      <p class="text-lg md:text-xl font-light text-gray-300 max-w-2xl mx-auto leading-relaxed">
+        Fresh, seasonal blooms delivered to your door on your schedule. Whether treating yourself or a loved one, enjoy the constant presence of nature's beauty.
+      </p>
+    </div>
+  </section>
+
+  <!-- Subscription Tiers -->
+  <section class="py-20 bg-sb-cream text-sb-black">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <div class="text-center mb-16 reveal">
+        <h2 class="font-serif text-3xl md:text-4xl mb-4 font-light">Choose Your Tier</h2>
+        <p class="text-gray-500 font-light">Select the size that suits your space. You can pause or cancel anytime.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Classic Tier -->
+        <div class="bg-white p-8 border border-gray-100 hover:border-sb-gold transition-colors duration-500 group reveal">
+          <h3 class="font-serif text-2xl mb-2 text-sb-black">The Classic</h3>
+          <p class="text-sb-gold font-bold mb-6">£40 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-500 font-light text-sm mb-8 h-20">A petite, perfectly formed arrangement ideal for bedside tables, small desks, or cozy corners.</p>
+          <ul class="text-sm text-gray-600 space-y-3 mb-8 font-light">
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 15-20 stems</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Seasonal focal flowers</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Free local delivery</li>
+          </ul>
+          <a href="/contact" class="block w-full text-center border border-sb-black text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors">Select Classic</a>
+        </div>
+
+        <!-- Signature Tier -->
+        <div class="bg-sb-black p-8 border border-sb-black transform md:-translate-y-4 shadow-xl reveal" style="transition-delay: 100ms;">
+          <div class="bg-sb-gold text-sb-black text-[9px] uppercase font-bold tracking-luxury inline-block px-3 py-1 mb-4">Most Popular</div>
+          <h3 class="font-serif text-2xl mb-2 text-sb-cream">The Signature</h3>
+          <p class="text-sb-gold font-bold mb-6">£65 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-300 font-light text-sm mb-8 h-20">Our standard size. A beautiful, medium-sized bouquet that creates a stunning centerpiece for any room.</p>
+          <ul class="text-sm text-gray-300 space-y-3 mb-8 font-light">
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 25-35 stems</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Premium focal & filler flowers</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Includes a free glass vase on 1st order</li>
+          </ul>
+          <a href="/contact" class="block w-full text-center bg-sb-gold text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-white hover:text-sb-black transition-colors">Select Signature</a>
+        </div>
+
+        <!-- Luxe Tier -->
+        <div class="bg-white p-8 border border-gray-100 hover:border-sb-gold transition-colors duration-500 group reveal" style="transition-delay: 200ms;">
+          <h3 class="font-serif text-2xl mb-2 text-sb-black">The Luxe</h3>
+          <p class="text-sb-gold font-bold mb-6">£100 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-500 font-light text-sm mb-8 h-20">A show-stopping, abundant arrangement designed to impress. Features our most premium and rare stems.</p>
+          <ul class="text-sm text-gray-600 space-y-3 mb-8 font-light">
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 45-60 stems</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Luxury stems (Orchids, Peonies, etc.)</li>
+            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Priority delivery scheduling</li>
+          </ul>
+          <a href="/contact" class="block w-full text-center border border-sb-black text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors">Select Luxe</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Set and Forget Feature -->
+  <section class="py-20 bg-white border-t border-gray-100">
+    <div class="container mx-auto px-6 max-w-5xl flex flex-col md:flex-row items-center gap-12">
+      <div class="w-full md:w-1/2 reveal">
+        <img src="/images/story-arranging.jpg" alt="Florist arranging flowers" class="w-full aspect-square object-cover shadow-2xl" />
+      </div>
+      <div class="w-full md:w-1/2 reveal" style="transition-delay: 150ms;">
+        <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Never Miss a Date</span>
+        <h2 class="font-serif text-3xl md:text-5xl mb-6 font-light text-sb-black">"Set & Forget" Gifting</h2>
+        <p class="text-gray-600 font-light leading-relaxed mb-6">
+          Anniversaries, birthdays, Mother's Day—keeping track of every important date can be stressful. Our unique "Set & Forget" service allows you to schedule your yearly flower deliveries all at once.
+        </p>
+        <p class="text-gray-600 font-light leading-relaxed mb-8">
+          Tell us the dates and your budget, and we'll handle the rest. We'll even text you a reminder two days before the delivery goes out, so you always look like a hero.
+        </p>
+        <a href="/contact" class="inline-block bg-sb-black text-sb-gold px-8 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-gold hover:text-sb-black transition-colors duration-300">Set Up Your Calendar</a>
+      </div>
+    </div>
+  </section>
+
+</Layout>
