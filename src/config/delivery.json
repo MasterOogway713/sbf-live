@@ -1,0 +1,5 @@
+{
+  "validPrefixes": ["RM1", "RM11", "RM12", "RM2", "RM3", "RM4", "RM5", "RM7", "CM13", "CM14", "CM15"],
+  "freeDeliveryThreshold": 60,
+  "standardDeliveryFee": 4.99
+}
