@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { shopifyFetch } from '../utils/shopify.js';
 
-// Fetch all products INCLUDING their descriptions and tags at build time
+// Fetch all products INCLUDING their descriptions at build time
 const query = `
   {
     products(first: 100) {
@@ -44,57 +44,58 @@ const products = rawProducts.map(({ node }) => ({
 }));
 ---
 
-<Layout title="Collection Matcher | SB Floristry" description="Let our interactive studio guide curate the perfect luxury bouquet from our seasonal, gothic, and fairytale collections.">
+<Layout title="AI Gift Advisor | SB Floristry" description="Let our intelligent AI Gift Advisor find the perfect luxury bouquet for your occasion.">
   
   <!-- Step 1-3 Quiz Background -->
+  <!-- FIX: Switched to min-h-[100dvh] with pt-24 pb-12 to perfectly center on mobile below the header -->
   <section class="min-h-[100dvh] bg-sb-cream flex flex-col items-center justify-center px-4 md:px-6 relative pt-24 pb-12" id="quiz-background">
     
     <!-- FIXED HEIGHT CONTAINER: Locks proportions so the box never jumps -->
-    <div class="max-w-4xl w-full bg-white border border-gray-100 shadow-xl p-4 md:p-12 text-center relative overflow-hidden transition-all duration-1000 h-[400px] sm:h-[420px] md:h-[500px] flex flex-col justify-center items-center" id="quiz-container">
+    <div class="max-w-4xl w-full bg-white border border-gray-100 shadow-xl p-4 md:p-12 text-center relative overflow-hidden transition-all duration-1000 h-[380px] sm:h-[420px] md:h-[500px] flex flex-col justify-center items-center" id="quiz-container">
       
       <!-- Progress Bar -->
       <div class="absolute top-0 left-0 w-full h-1 bg-gray-50" id="progress-container">
         <div class="h-full bg-sb-gold transition-all duration-1000 ease-in-out w-0" id="progress-bar"></div>
       </div>
 
-      <!-- Step 1: Collection Theme -->
+      <!-- Step 1: Who is it for? -->
       <div class="quiz-step w-full opacity-100 translate-y-0 transition-all duration-700 ease-out absolute px-4 md:px-16" id="step-1">
-        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-3 md:mb-6 block"><i class="fas fa-crown mr-1"></i> Bespoke Curation</span>
-        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">Which aesthetic draws you in?</h2>
+        <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-3 md:mb-6 block"><i class="fas fa-sparkles mr-1"></i> AI Gift Advisor</span>
+        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">Who are we spoiling today?</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 max-w-2xl mx-auto">
-          <!-- The data-keywords map directly to your Shopify tags and collection vibes -->
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="seasonal,spring,summer,autumn,winter,fresh,garden,nature">Seasonal Signatures</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="gothic,dark,moody,velvet,crimson,burgundy,black,deep,dramatic">Dark & Gothic</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="fairytale,pastel,soft,dreamy,whimsical,meadow,pink,blush">Soft & Fairytale</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="luxury,elegant,premium,classic,white,orchid,sophisticated,timeless">Timeless Luxury</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="romantic,love,red,rose,passion,heart,kiss,anniversary">My Partner</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="cheerful,bright,yellow,garden,delight,wildflower,warm,sunflower,friend">A Friend or Family</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="corporate,elegant,sophisticated,white,classic,office,desk,formal">A Colleague / Client</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-2" data-keywords="luxury,indulgent,fragrant,opulent,premium,treat,beautiful">Treating Myself</button>
         </div>
       </div>
 
-      <!-- Step 2: Intention -->
+      <!-- Step 2: What's the vibe? -->
       <div class="quiz-step w-full hidden opacity-0 translate-y-4 transition-all duration-700 ease-out absolute px-4 md:px-16" id="step-2">
         <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-3 md:mb-6 block">Step 2 of 3</span>
-        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">What is the intention?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 max-w-3xl mx-auto">
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="gift,wrapped,thoughtful,present,romantic,special">A Thoughtful Gift</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="home,vase,table,dining,interior,decor,space">Home Styling</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="event,grand,statement,showstopper,display,tall,impact">A Grand Display</button>
+        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">What's the overall vibe?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 max-w-2xl mx-auto">
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="red,velvet,deep,moody,gothic,dark,wine,crimson,burgundy">Romantic & Deep</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="spring,summer,bright,wild,meadow,colorful,orange,vibrant,pink">Bright & Fresh</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="white,cream,orchid,elegant,pure,hydrangea,classic,timeless">Classic & Elegant</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg" data-next="step-3" data-keywords="pastel,soft,sympathy,gentle,blush,peach,delicate,lily,peace">Soft & Gentle</button>
         </div>
       </div>
 
-      <!-- Step 3: Budget / Scale -->
+      <!-- Step 3: Budget -->
       <div class="quiz-step w-full hidden opacity-0 translate-y-4 transition-all duration-700 ease-out absolute px-4 md:px-16" id="step-3">
         <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-3 md:mb-6 block">Step 3 of 3</span>
-        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">Select your ideal scale</h2>
+        <h2 class="font-serif text-2xl sm:text-3xl md:text-5xl text-sb-black mb-5 md:mb-10 font-light">What is your price range?</h2>
         <div class="flex flex-col gap-3 md:gap-5 max-w-md mx-auto w-full">
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="35" data-max="60">Bespoke Bouquet (£40 - £60)</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="61" data-max="99">Premium Masterpiece (£60 - £100)</button>
-          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="100" data-max="999">Showstopper (£100+)</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="40" data-max="60">£40 - £60</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="61" data-max="99">£60 - £100</button>
+          <button class="quiz-btn border border-gray-100 py-3 md:py-4 px-4 hover:border-sb-gold hover:bg-gray-50 hover:shadow-sm transition-all duration-500 text-sb-black font-light text-sm md:text-lg finish-quiz" data-min="100" data-max="999">£100+ (Showstopper)</button>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- THE CINEMATIC FULLSCREEN OVERLAY (Curation Loading + Results) -->
+  <!-- THE CINEMATIC FULLSCREEN OVERLAY (AI Loading + Results) -->
   <div id="cinematic-overlay" class="fixed inset-0 bg-sb-black z-[100] opacity-0 pointer-events-none transition-opacity duration-1000 flex flex-col items-center justify-center overflow-hidden">
     
     <!-- Ambient Background Lighting & Sparkles -->
@@ -106,19 +107,19 @@ const products = rawProducts.map(({ node }) => ({
         <div class="absolute top-[80%] left-[20%] w-2.5 h-2.5 bg-sb-gold rounded-full animate-pulse opacity-20 blur-[3px]"></div>
     </div>
 
-    <!-- Curation Loading View -->
+    <!-- AI Loading View -->
     <div id="ai-loading-view" class="relative z-10 flex flex-col items-center transition-all duration-1000 ease-in-out opacity-100 scale-100 w-full px-6 text-center">
         <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-10 md:mb-12 flex items-center justify-center">
             <div class="absolute inset-0 bg-sb-gold rounded-full blur-2xl opacity-20 animate-pulse"></div>
             <div class="absolute inset-0 border-[1px] border-sb-gold/30 rounded-full animate-[spin_6s_linear_infinite]"></div>
             <div class="absolute inset-0 border-[1px] border-sb-gold/15 rounded-full animate-[spin_8s_linear_infinite_reverse] scale-110"></div>
-            <i class="fas fa-leaf text-3xl md:text-4xl text-sb-gold relative z-10 animate-pulse"></i>
+            <i class="fas fa-magic text-3xl md:text-4xl text-sb-gold relative z-10 animate-pulse"></i>
         </div>
-        <h2 class="font-serif text-2xl md:text-4xl text-white mb-3 md:mb-4 font-light transition-all duration-1000 ease-in-out transform translate-y-0" id="ai-loading-text">Analyzing collection themes...</h2>
+        <h2 class="font-serif text-2xl md:text-4xl text-white mb-3 md:mb-4 font-light transition-all duration-1000 ease-in-out transform translate-y-0" id="ai-loading-text">Initializing AI Advisor...</h2>
         <p class="text-sb-gold/70 text-xs md:text-sm font-light uppercase tracking-widest" id="ai-loading-subtext">Please wait</p>
     </div>
 
-    <!-- Final Results View -->
+    <!-- Final Results View (Scrollable on mobile to fit 3 cards gracefully) -->
     <div id="ai-results-view" class="absolute inset-0 z-20 hidden flex-col items-center justify-start md:justify-center p-4 md:p-8 opacity-0 scale-105 transition-all duration-1000 w-full h-full overflow-y-auto overflow-x-hidden pt-12 md:pt-8 pb-20">
         
         <!-- Header -->
@@ -135,7 +136,7 @@ const products = rawProducts.map(({ node }) => ({
         <!-- Footer -->
         <div class="shrink-0 mt-8 md:mt-12 pt-6 border-t border-white/10 w-full max-w-xl text-center mx-auto">
             <button id="restart-concierge-btn" class="text-gray-400 hover:text-sb-gold text-[10px] tracking-luxury uppercase font-bold transition-colors duration-300">
-                <i class="fas fa-redo mr-2"></i> Restart Curation
+                <i class="fas fa-redo mr-2"></i> Restart Advisor
             </button>
         </div>
     </div>
@@ -183,10 +184,10 @@ const products = rawProducts.map(({ node }) => ({
       let userPreferences = { keywords: [], min: 0, max: 999 };
 
       const loadingPhrases = [
-          { main: "Evaluating aesthetic alignment...", sub: "Scanning studio inventory" },
-          { main: "Balancing the palette...", sub: "Selecting premium stems" },
-          { main: "Curating your perfect match...", sub: "Calculating scale and impact" },
-          { main: "Finalizing collection...", sub: "Almost ready" }
+          { main: "Analyzing floral profiles...", sub: "Scanning Essex inventory" },
+          { main: "Evaluating seasonal availability...", sub: "Matching colour palettes" },
+          { main: "Curating your perfect match...", sub: "Calculating sentiment" },
+          { main: "Finalizing recommendations...", sub: "Almost ready" }
       ];
 
       const productsDataEl = document.getElementById('product-data');
@@ -309,12 +310,9 @@ const products = rawProducts.map(({ node }) => ({
               keywords.forEach(kw => {
                   const regex = new RegExp(`\\b${kw}\\b`, 'i');
                   if (regex.test(searchString)) p.score += 1;
-                  // Extra weight if the keyword is actually in the title
                   if (regex.test(p.title)) p.score += 2; 
-                  // Extra weight if it exactly matches a collection tag
-                  if (p.tags.includes(kw)) p.score += 3;
               });
-              p.score += Math.random() * 0.5; // Tie breaker
+              p.score += Math.random() * 0.5;
           });
           return productsList.sort((a,b) => b.score - a.score);
       }
@@ -325,7 +323,7 @@ const products = rawProducts.map(({ node }) => ({
           let scoredProducts = scoreProducts([...validProducts], userPreferences.keywords);
 
           let inBudget = scoredProducts.filter(p => p.price >= userPreferences.min && p.price <= userPreferences.max);
-          if (inBudget.length === 0) inBudget = scoredProducts; // Fallback if no exact budget matches
+          if (inBudget.length === 0) inBudget = scoredProducts; // Fallback
 
           // --- 1. THE PERFECT MATCH (Center) ---
           const match1 = inBudget[0];
@@ -334,13 +332,13 @@ const products = rawProducts.map(({ node }) => ({
           let match2 = inBudget.find(p => p.handle !== match1.handle && p.price !== match1.price);
           if (!match2) match2 = scoredProducts.find(p => p.handle !== match1.handle);
 
-          // --- 3. SENSIBLE UPGRADE / SHOWSTOPPER (Right Side) ---
+          // --- 3. SENSIBLE UPGRADE (Right Side) ---
           const highestCurrentPrice = Math.max(match1.price, match2 ? match2.price : 0);
           let upgradeMatches = scoredProducts.filter(p => 
               p.handle !== match1.handle && 
               (!match2 || p.handle !== match2.handle) &&
               p.price > highestCurrentPrice &&
-              p.price <= highestCurrentPrice + 60
+              p.price <= highestCurrentPrice + 50
           );
 
           let match3 = upgradeMatches[0];
@@ -352,7 +350,7 @@ const products = rawProducts.map(({ node }) => ({
           window.currentLightboxData = [];
           if(match2) window.currentLightboxData.push({product: match2, label: "Beautiful Alternative", type: "side"});
           if(match1) window.currentLightboxData.push({product: match1, label: "The Perfect Match", type: "center"});
-          if(match3) window.currentLightboxData.push({product: match3, label: "Scale Upgrade", type: "side"});
+          if(match3) window.currentLightboxData.push({product: match3, label: "Sensible Upgrade", type: "side"});
 
           const grid = document.getElementById('results-grid');
           grid.innerHTML = ''; 
@@ -385,6 +383,7 @@ const products = rawProducts.map(({ node }) => ({
           
           const overlay = document.getElementById('lightbox-overlay');
           overlay.classList.remove('hidden');
+          // small delay to allow display block to process before fading in
           setTimeout(() => overlay.classList.remove('opacity-0'), 10);
       }
 
@@ -410,6 +409,7 @@ const products = rawProducts.map(({ node }) => ({
           const item = window.currentLightboxData[window.currentLightboxIndex];
           const imgEl = document.getElementById('lightbox-img');
           
+          // Slight fade effect when switching images
           imgEl.style.opacity = 0;
           setTimeout(() => {
               imgEl.src = item.product.image;
@@ -443,6 +443,7 @@ const products = rawProducts.map(({ node }) => ({
                         <i class="fas fa-search-plus text-white text-3xl md:text-5xl drop-shadow-md"></i>
                     </div>
 
+                    <!-- Clean image without zoom on hover -->
                     <img 
                         src="${product.image}" 
                         alt="${product.title}" 
@@ -451,7 +452,7 @@ const products = rawProducts.map(({ node }) => ({
                     />
                 </div>
                 
-                <!-- Text Container -->
+                <!-- Text Container: H-Auto ensures no text gets cut off -->
                 <div class="w-[60%] md:w-full p-4 md:p-6 text-left md:text-center relative z-20 flex flex-col justify-center flex-grow bg-sb-black/80 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none min-h-[9rem]">
                     <div class="md:hidden ${badgeClass} text-[8px] uppercase tracking-luxury font-bold px-2 py-1 mb-3 inline-block w-max border">
                         ${label}
