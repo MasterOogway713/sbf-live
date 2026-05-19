@@ -2,95 +2,154 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Floral Subscriptions & Gifting | SB Floristry" description="Subscribe to regular luxury flower deliveries in Essex, or use our Set and Forget service for yearly occasions.">
+<Layout title="Floral Subscriptions | SB Floristry" description="Subscribe to regular luxury flower deliveries in Essex. Set up easily via Direct Debit.">
   
-  <!-- Hero Section -->
-  <section class="relative pt-32 pb-20 bg-sb-black text-sb-cream overflow-hidden">
-    <div class="absolute inset-0 z-0 opacity-40">
-      <img src="/images/collection-signature.jpg" alt="Subscription Flowers" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-black/60"></div>
+  <section class="relative min-h-[80vh] flex items-center justify-center bg-sb-black text-sb-cream overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img src="/images/collection-signature.jpg" alt="Luxury Subscription Flowers" class="w-full h-full object-cover opacity-60 hero-zoom" />
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-sb-black"></div>
     </div>
-    <div class="container mx-auto px-6 max-w-4xl relative z-10 text-center reveal">
-      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Recurring Luxury</span>
-      <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light">The SB Subscription</h1>
-      <p class="text-lg md:text-xl font-light text-gray-300 max-w-2xl mx-auto leading-relaxed">
-        Fresh, seasonal blooms delivered to your door on your schedule. Whether treating yourself or a loved one, enjoy the constant presence of nature's beauty.
+    <div class="container mx-auto px-6 relative z-10 text-center reveal mt-20">
+      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-6 block">The SB Subscription</span>
+      <h1 class="font-serif text-5xl md:text-8xl mb-8 font-light tracking-wide">Endless <br/><span class="italic text-sb-gold">Elegance</span></h1>
+      <p class="text-lg md:text-xl font-light text-gray-300 max-w-xl mx-auto leading-relaxed">
+        Curated seasonal blooms delivered seamlessly to your door. Managed securely via direct debit, paused or cancelled at any time.
       </p>
     </div>
   </section>
 
-  <!-- Subscription Tiers -->
-  <section class="py-20 bg-sb-cream text-sb-black">
+  <section class="py-32 bg-sb-cream text-sb-black">
     <div class="container mx-auto px-6 max-w-6xl">
-      <div class="text-center mb-16 reveal">
-        <h2 class="font-serif text-3xl md:text-4xl mb-4 font-light">Choose Your Tier</h2>
-        <p class="text-gray-500 font-light">Select the size that suits your space. You can pause or cancel anytime.</p>
+      
+      <div class="flex flex-col md:flex-row items-center gap-16 mb-32 reveal">
+        <div class="w-full md:w-1/2">
+          <div class="aspect-[4/5] overflow-hidden relative group">
+            <img src="/images/product-wild-meadow.jpg" alt="The Classic Subscription" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 md:pl-12">
+          <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Tier 01</span>
+          <h2 class="font-serif text-4xl md:text-5xl mb-4 text-sb-black">The Classic</h2>
+          <p class="text-xl text-gray-500 mb-6 font-light">£40 <span class="text-sm uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-600 font-light leading-relaxed mb-8">
+            A petite, perfectly formed arrangement ideal for bedside tables, small desks, or cozy corners. Featuring 15-20 stems of the season's finest focal flowers.
+          </p>
+          <ul class="text-sm text-gray-500 space-y-4 mb-10 font-light border-l border-sb-gold/30 pl-6">
+            <li>Includes free local delivery</li>
+            <li>Bespoke seasonal selection</li>
+            <li>Pause or cancel anytime</li>
+          </ul>
+          <button data-plan="classic" class="subscribe-btn inline-block bg-transparent border border-sb-black text-sb-black px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors duration-300">
+            Subscribe Now
+          </button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        
-        <!-- Classic Tier -->
-        <div class="bg-white p-8 border border-gray-100 hover:border-sb-gold transition-colors duration-500 group reveal">
-          <h3 class="font-serif text-2xl mb-2 text-sb-black">The Classic</h3>
-          <p class="text-sb-gold font-bold mb-6">£40 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
-          <p class="text-gray-500 font-light text-sm mb-8 h-20">A petite, perfectly formed arrangement ideal for bedside tables, small desks, or cozy corners.</p>
-          <ul class="text-sm text-gray-600 space-y-3 mb-8 font-light">
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 15-20 stems</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Seasonal focal flowers</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Free local delivery</li>
-          </ul>
-          <a href="/contact" class="block w-full text-center border border-sb-black text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors">Select Classic</a>
+      <div class="flex flex-col md:flex-row-reverse items-center gap-16 mb-32 reveal">
+        <div class="w-full md:w-1/2">
+          <div class="aspect-[4/5] overflow-hidden relative group">
+            <img src="/images/product-pure-elegance.jpg" alt="The Signature Subscription" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+            <div class="absolute top-6 right-6 bg-sb-gold text-sb-black text-[9px] uppercase font-bold tracking-luxury px-4 py-2">Most Popular</div>
+          </div>
         </div>
-
-        <!-- Signature Tier -->
-        <div class="bg-sb-black p-8 border border-sb-black transform md:-translate-y-4 shadow-xl reveal" style="transition-delay: 100ms;">
-          <div class="bg-sb-gold text-sb-black text-[9px] uppercase font-bold tracking-luxury inline-block px-3 py-1 mb-4">Most Popular</div>
-          <h3 class="font-serif text-2xl mb-2 text-sb-cream">The Signature</h3>
-          <p class="text-sb-gold font-bold mb-6">£65 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
-          <p class="text-gray-300 font-light text-sm mb-8 h-20">Our standard size. A beautiful, medium-sized bouquet that creates a stunning centerpiece for any room.</p>
-          <ul class="text-sm text-gray-300 space-y-3 mb-8 font-light">
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 25-35 stems</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Premium focal & filler flowers</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Includes a free glass vase on 1st order</li>
+        <div class="w-full md:w-1/2 md:pr-12">
+          <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Tier 02</span>
+          <h2 class="font-serif text-4xl md:text-5xl mb-4 text-sb-black">The Signature</h2>
+          <p class="text-xl text-gray-500 mb-6 font-light">£65 <span class="text-sm uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-600 font-light leading-relaxed mb-8">
+            Our standard size. A beautiful, medium-sized bouquet that creates a stunning centerpiece for any room. Approximately 25-35 stems of premium focal and filler flowers.
+          </p>
+          <ul class="text-sm text-gray-500 space-y-4 mb-10 font-light border-l border-sb-gold/30 pl-6">
+            <li>Free glass vase with first order</li>
+            <li>Premium stems & varied textures</li>
+            <li>Flexible delivery schedule</li>
           </ul>
-          <a href="/contact" class="block w-full text-center bg-sb-gold text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-white hover:text-sb-black transition-colors">Select Signature</a>
+          <button data-plan="signature" class="subscribe-btn inline-block bg-sb-black border border-sb-black text-sb-gold px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-gold hover:text-sb-black hover:border-sb-gold transition-colors duration-300 shadow-xl">
+            Subscribe Now
+          </button>
         </div>
+      </div>
 
-        <!-- Luxe Tier -->
-        <div class="bg-white p-8 border border-gray-100 hover:border-sb-gold transition-colors duration-500 group reveal" style="transition-delay: 200ms;">
-          <h3 class="font-serif text-2xl mb-2 text-sb-black">The Luxe</h3>
-          <p class="text-sb-gold font-bold mb-6">£100 <span class="text-xs text-gray-400 font-normal uppercase tracking-wider">/ delivery</span></p>
-          <p class="text-gray-500 font-light text-sm mb-8 h-20">A show-stopping, abundant arrangement designed to impress. Features our most premium and rare stems.</p>
-          <ul class="text-sm text-gray-600 space-y-3 mb-8 font-light">
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Approx. 45-60 stems</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Luxury stems (Orchids, Peonies, etc.)</li>
-            <li><i class="fas fa-check text-sb-gold mr-2 text-[10px]"></i> Priority delivery scheduling</li>
+      <div class="flex flex-col md:flex-row items-center gap-16 reveal">
+        <div class="w-full md:w-1/2">
+          <div class="aspect-[4/5] overflow-hidden relative group">
+            <img src="/images/product-essex-rose.jpg" alt="The Luxe Subscription" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+          </div>
+        </div>
+        <div class="w-full md:w-1/2 md:pl-12">
+          <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Tier 03</span>
+          <h2 class="font-serif text-4xl md:text-5xl mb-4 text-sb-black">The Luxe</h2>
+          <p class="text-xl text-gray-500 mb-6 font-light">£100 <span class="text-sm uppercase tracking-wider">/ delivery</span></p>
+          <p class="text-gray-600 font-light leading-relaxed mb-8">
+            A show-stopping, abundant arrangement designed to impress. Features 45-60 of our most premium, rare, and luxurious stems including Orchids and Peonies.
+          </p>
+          <ul class="text-sm text-gray-500 space-y-4 mb-10 font-light border-l border-sb-gold/30 pl-6">
+            <li>Priority delivery scheduling</li>
+            <li>Exclusive, rare floral varieties</li>
+            <li>Statement sizing and presentation</li>
           </ul>
-          <a href="/contact" class="block w-full text-center border border-sb-black text-sb-black py-3 text-xs uppercase font-bold tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors">Select Luxe</a>
+          <button data-plan="luxe" class="subscribe-btn inline-block bg-transparent border border-sb-black text-sb-black px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-black hover:text-sb-gold transition-colors duration-300">
+            Subscribe Now
+          </button>
         </div>
+      </div>
 
+    </div>
+  </section>
+
+  <section class="py-12 bg-white border-y border-gray-100">
+    <div class="container mx-auto px-6 text-center">
+      <p class="text-[10px] uppercase tracking-luxury text-gray-400 mb-4 font-bold">Secure Payments Powered By</p>
+      <div class="flex justify-center items-center gap-8 opacity-60 grayscale">
+        <span class="font-sans font-bold text-xl tracking-tighter">GOCARDLESS</span>
+        <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+        <span class="font-sans font-bold text-xl tracking-tighter">Direct Debit</span>
       </div>
     </div>
   </section>
 
-  <!-- Set and Forget Feature -->
-  <section class="py-20 bg-white border-t border-gray-100">
-    <div class="container mx-auto px-6 max-w-5xl flex flex-col md:flex-row items-center gap-12">
-      <div class="w-full md:w-1/2 reveal">
-        <img src="/images/story-arranging.jpg" alt="Florist arranging flowers" class="w-full aspect-square object-cover shadow-2xl" />
-      </div>
-      <div class="w-full md:w-1/2 reveal" style="transition-delay: 150ms;">
-        <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Never Miss a Date</span>
-        <h2 class="font-serif text-3xl md:text-5xl mb-6 font-light text-sb-black">"Set & Forget" Gifting</h2>
-        <p class="text-gray-600 font-light leading-relaxed mb-6">
-          Anniversaries, birthdays, Mother's Day—keeping track of every important date can be stressful. Our unique "Set & Forget" service allows you to schedule your yearly flower deliveries all at once.
-        </p>
-        <p class="text-gray-600 font-light leading-relaxed mb-8">
-          Tell us the dates and your budget, and we'll handle the rest. We'll even text you a reminder two days before the delivery goes out, so you always look like a hero.
-        </p>
-        <a href="/contact" class="inline-block bg-sb-black text-sb-gold px-8 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-gold hover:text-sb-black transition-colors duration-300">Set Up Your Calendar</a>
-      </div>
+  <section class="py-24 bg-sb-black text-sb-cream">
+    <div class="container mx-auto px-6 max-w-4xl text-center reveal">
+      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-6 block">Yearly Occasions</span>
+      <h2 class="font-serif text-4xl md:text-6xl mb-8 font-light text-white">"Set & Forget" Gifting</h2>
+      <p class="text-gray-400 font-light leading-relaxed text-lg mb-10 max-w-2xl mx-auto">
+        Anniversaries, birthdays, Mother's Day—keep track of every important date effortlessly. Give us the dates and your budget, and we'll handle the rest, complete with a 48-hour reminder before we deliver.
+      </p>
+      <a href="/contact?subject=Set+And+Forget" class="inline-block bg-sb-gold text-sb-black px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-white transition-colors duration-300">
+        Setup Your Calendar
+      </a>
     </div>
   </section>
 
 </Layout>
+
+<script>
+  // Setup logic to trigger GoCardless flow
+  document.querySelectorAll('.subscribe-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const plan = e.target.getAttribute('data-plan');
+      e.target.innerHTML = 'Processing...';
+      
+      try {
+        // This will call the Astro API endpoint we will create
+        const response = await fetch('/api/gocardless/create-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ planTier: plan })
+        });
+        
+        const data = await response.json();
+        
+        if (data.checkoutUrl) {
+          // Redirect user to the GoCardless hosted payment page
+          window.location.href = data.checkoutUrl;
+        } else {
+          throw new Error('No checkout URL returned');
+        }
+      } catch (error) {
+        console.error('Payment initialization failed:', error);
+        e.target.innerHTML = 'Error - Try Again';
+      }
+    });
+  });
+</script>
