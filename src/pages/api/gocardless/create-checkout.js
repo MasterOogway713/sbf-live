@@ -18,7 +18,9 @@ const PLAN_CONFIG = {
 
 export const POST = async ({ request, locals }) => {
   try {
-    const { planTier } = await request.json();
+    // 1. Extract all the detailed info submitted by the new customer modal
+    const data = await request.json();
+    const { planTier, firstName, lastName, email, address, frequency, reason } = data;
     const selectedPlan = PLAN_CONFIG[planTier];
 
     if (!selectedPlan) {
@@ -28,13 +30,11 @@ export const POST = async ({ request, locals }) => {
       });
     }
 
-    // Access Cloudflare environment variables safely
-    // Cloudflare Pages matches variables defined in the dashboard to both import.meta.env & locals
     const gcToken = import.meta.env.GOCARDLESS_ACCESS_TOKEN || (locals?.runtime?.env?.GOCARDLESS_ACCESS_TOKEN);
     const gcEnv = import.meta.env.PUBLIC_GC_ENVIRONMENT || (locals?.runtime?.env?.PUBLIC_GC_ENVIRONMENT) || 'sandbox';
 
     if (!gcToken) {
-      return new Response(JSON.stringify({ error: "GoCardless integration is not configured with an access token." }), { 
+      return new Response(JSON.stringify({ error: "GoCardless integration is not configured." }), { 
         status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
@@ -44,7 +44,7 @@ export const POST = async ({ request, locals }) => {
       ? 'https://api.gocardless.com' 
       : 'https://api-sandbox.gocardless.com';
 
-    // 1. Create a Billing Request
+    // 2. Create the Billing Request & attach details into the GoCardless Database via Metadata
     const brResponse = await fetch(`${apiBase}/billing_requests`, {
       method: 'POST',
       headers: {
@@ -55,12 +55,17 @@ export const POST = async ({ request, locals }) => {
       body: JSON.stringify({
         billing_requests: {
           payment_request: {
-            description: `SB Floristry - ${selectedPlan.name}`,
+            description: `SB Floristry - ${selectedPlan.name} (${frequency || 'Regular'})`,
             amount: selectedPlan.amount,
             currency: 'GBP'
           },
           mandate_request: {
-            scheme: 'bacs' // UK Direct Debit Scheme
+            scheme: 'bacs',
+            metadata: {
+              frequency: frequency || 'Not Specified',
+              reason: reason || 'Not Specified',
+              delivery_address: (address || 'Not Specified').substring(0, 450)
+            }
           }
         }
       })
@@ -74,7 +79,7 @@ export const POST = async ({ request, locals }) => {
 
     const billingRequestId = brData.billing_requests.id;
 
-    // 2. Generate the Billing Request Flow (Hosted Checkout Flow)
+    // 3. Generate Checkout Flow & PRE-FILL the customer details
     const flowResponse = await fetch(`${apiBase}/billing_request_flows`, {
       method: 'POST',
       headers: {
@@ -88,6 +93,12 @@ export const POST = async ({ request, locals }) => {
           exit_uri: 'https://www.sbfloristry.co.uk/subscriptions',
           links: {
             billing_request: billingRequestId
+          },
+          // This forces GoCardless to use the exact name and email they typed!
+          prefilled_customer: {
+            given_name: firstName,
+            family_name: lastName,
+            email: email
           }
         }
       })
