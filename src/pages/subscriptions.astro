@@ -102,6 +102,83 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <!-- Delivery Details Modal -->
+  <div id="subModal" class="fixed inset-0 bg-black/80 z-[100] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="bg-sb-cream w-full max-w-2xl p-8 md:p-12 relative transform scale-95 transition-transform duration-300 shadow-2xl overflow-y-auto max-h-[90vh] hide-scrollbar" id="subModalContent">
+      <button id="closeSubModal" class="absolute top-6 right-6 text-gray-400 hover:text-sb-gold transition-colors focus:outline-none">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+      
+      <span class="text-sb-gold text-[10px] tracking-luxury uppercase font-bold mb-2 block" id="modalPlanName">Subscription</span>
+      <h3 class="font-serif text-3xl text-sb-black mb-6">Delivery Details</h3>
+      
+      <form id="subscriptionForm" class="space-y-6">
+        <input type="hidden" id="planTier" name="planTier" value="">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">First Name</label>
+            <input type="text" name="firstName" required class="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-sb-gold outline-none transition-colors">
+          </div>
+          <div>
+            <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">Last Name</label>
+            <input type="text" name="lastName" required class="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-sb-gold outline-none transition-colors">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">Email Address</label>
+          <input type="email" name="email" required class="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-sb-gold outline-none transition-colors">
+        </div>
+
+        <div>
+          <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-2">Full Delivery Address & Postcode</label>
+          <textarea name="address" required rows="3" class="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-sb-gold outline-none transition-colors resize-none"></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-gray-200">
+          <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-4">Delivery Frequency</label>
+          <div class="grid grid-cols-3 gap-2 md:gap-4">
+            <label class="cursor-pointer">
+              <input type="radio" name="frequency" value="Weekly" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Weekly</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="frequency" value="Fortnightly" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Fortnightly</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="frequency" value="Monthly" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Monthly</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-200">
+          <label class="block text-[10px] uppercase tracking-widest text-gray-500 mb-4">Reason for Subscription</label>
+          <div class="grid grid-cols-3 gap-2 md:gap-4">
+            <label class="cursor-pointer">
+              <input type="radio" name="reason" value="Treating Myself" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Treat Myself</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="reason" value="Gift for Someone" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Gift</div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="reason" value="Corporate/Office" class="peer sr-only" required>
+              <div class="text-center border border-gray-200 py-3 px-1 text-[10px] md:text-xs uppercase tracking-wider peer-checked:bg-sb-black peer-checked:text-sb-gold transition-colors hover:border-sb-black">Office</div>
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" id="submitFormBtn" class="w-full mt-6 bg-sb-black text-sb-gold py-4 text-xs uppercase font-bold tracking-luxury hover:bg-sb-gold hover:text-sb-black transition-colors shadow-xl">
+          Continue to Secure Payment
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- GoCardless Trust Banner -->
   <section class="py-12 bg-white border-y border-gray-100">
     <div class="container mx-auto px-6 text-center">
@@ -114,40 +191,82 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <style>
+    /* Hides scrollbar in the modal for a cleaner look */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+
 </Layout>
 
 <script>
+  const subModal = document.getElementById('subModal');
+  const subModalContent = document.getElementById('subModalContent');
+  const closeSubModal = document.getElementById('closeSubModal');
+  const planTierInput = document.getElementById('planTier');
+  const modalPlanName = document.getElementById('modalPlanName');
+  const subscriptionForm = document.getElementById('subscriptionForm');
+  const submitFormBtn = document.getElementById('submitFormBtn');
+
+  function openModal(plan) {
+    if (!subModal) return;
+    planTierInput.value = plan;
+    modalPlanName.innerText = `The ${plan.charAt(0).toUpperCase() + plan.slice(1)} Subscription`;
+    
+    subModal.classList.remove('hidden');
+    setTimeout(() => {
+      subModal.classList.remove('opacity-0');
+      subModalContent?.classList.add('scale-100');
+    }, 10);
+  }
+
+  function closeModal() {
+    if (!subModal) return;
+    subModal.classList.add('opacity-0');
+    subModalContent?.classList.remove('scale-100');
+    setTimeout(() => subModal.classList.add('hidden'), 300);
+  }
+
   document.querySelectorAll('.subscribe-btn').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const target = e.currentTarget;
-      const originalText = target.innerHTML;
-      target.innerHTML = 'Processing...';
-      target.disabled = true;
-      
-      const plan = target.getAttribute('data-plan');
-      
-      try {
-        const response = await fetch('/api/gocardless/create-checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ planTier: plan })
-        });
-        
-        const data = await response.json();
-        
-        if (data.checkoutUrl) {
-          window.location.href = data.checkoutUrl;
-        } else {
-          throw new Error(data.error || 'No checkout URL returned');
-        }
-      } catch (error) {
-        console.error('Payment initialization failed:', error);
-        target.innerHTML = 'Error - Try Again';
-        target.disabled = false;
-        setTimeout(() => {
-          target.innerHTML = originalText;
-        }, 3000);
-      }
+    btn.addEventListener('click', (e) => {
+      const plan = e.currentTarget.getAttribute('data-plan');
+      openModal(plan);
     });
+  });
+
+  closeSubModal?.addEventListener('click', closeModal);
+
+  subscriptionForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const originalText = submitFormBtn.innerHTML;
+    submitFormBtn.innerHTML = 'Securely Initializing...';
+    submitFormBtn.disabled = true;
+    
+    const formData = new FormData(subscriptionForm);
+    const dataObj = Object.fromEntries(formData.entries());
+    
+    try {
+      const response = await fetch('/api/gocardless/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataObj)
+      });
+      
+      const data = await response.json();
+      
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        throw new Error(data.error || 'No checkout URL returned');
+      }
+    } catch (error) {
+      console.error('Payment initialization failed:', error);
+      submitFormBtn.innerHTML = 'Error - Please Try Again';
+      submitFormBtn.disabled = false;
+      setTimeout(() => {
+        submitFormBtn.innerHTML = originalText;
+      }, 3000);
+    }
   });
 </script>
