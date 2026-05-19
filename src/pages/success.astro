@@ -1,29 +1,127 @@
 ---
+export const prerender = false; // Runs server-side on Cloudflare to fetch details securely
+
 import Layout from '../layouts/Layout.astro';
+
+// 1. Capture the query parameters appended by GoCardless
+const billingRequestId = Astro.url.searchParams.get('billing_request_id');
+
+let customerName = "";
+let planName = "Your Luxury Subscription";
+
+// 2. If a billing request ID is present, fetch the subscriber details from GoCardless
+if (billingRequestId) {
+  try {
+    const gcToken = import.meta.env.GOCARDLESS_ACCESS_TOKEN;
+    const gcEnv = import.meta.env.PUBLIC_GC_ENVIRONMENT || 'sandbox';
+    const apiBase = gcEnv === 'live' 
+      ? 'https://api.gocardless.com' 
+      : 'https://api-sandbox.gocardless.com';
+
+    // Retrieve Billing Request details
+    const response = await fetch(`${apiBase}/billing_requests/${billingRequestId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${gcToken}`,
+        'GoCardless-Version': '2015-07-06',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Grab customer details if they exist in the links/resources
+      const customer = data.billing_requests?.resources?.customer;
+      if (customer?.given_name) {
+        customerName = customer.given_name;
+      }
+
+      // Determine the tier description
+      const desc = data.billing_requests?.payment_request?.description;
+      if (desc) {
+        planName = desc.replace("SB Floristry - ", "");
+      }
+    }
+  } catch (error) {
+    console.error("Failed to retrieve subscription info on success page:", error);
+  }
+}
 ---
 
 <Layout title="Thank You | SB Floristry" description="Your luxury floral subscription has been confirmed.">
-  <section class="min-h-screen flex items-center justify-center bg-sb-cream text-sb-black py-32">
-    <div class="container mx-auto px-6 max-w-2xl text-center reveal">
-      <div class="mb-8 flex justify-center">
-        <div class="w-16 h-16 border border-sb-gold rounded-full flex items-center justify-center text-sb-gold">
-          <i class="fas fa-check text-2xl"></i>
+  <section class="min-h-screen flex items-center justify-center bg-sb-cream text-sb-black py-32 relative overflow-hidden">
+    
+    <!-- Subtle luxury background graphics -->
+    <div class="absolute inset-0 z-0 pointer-events-none opacity-5">
+      <img src="/images/collection-signature.jpg" alt="Botanical Background" class="w-full h-full object-cover filter blur-sm" />
+    </div>
+
+    <div class="container mx-auto px-6 max-w-2xl text-center relative z-10 reveal">
+      
+      <!-- Decorative Logo Accent -->
+      <div class="mb-12 flex justify-center">
+        <div class="relative">
+          <div class="w-24 h-24 border border-sb-gold/40 rounded-full flex items-center justify-center text-sb-gold animate-[spin_20s_linear_infinite]"></div>
+          <i class="fas fa-feather-alt text-2xl text-sb-gold absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></i>
         </div>
       </div>
       
-      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Thank You</span>
-      <h1 class="font-serif text-4xl md:text-6xl mb-6 font-light">Subscription Confirmed</h1>
-      <p class="text-gray-600 font-light leading-relaxed mb-10 max-w-md mx-auto">
-        Your luxury direct debit mandate has been successfully initiated. We will curating your first design and deliver it beautifully on our next scheduled cycle.
+      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-4 block">Welcome to the Club</span>
+      
+      {customerName ? (
+        <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light leading-tight">
+          Thank you, <br/>
+          <span class="italic text-sb-gold font-normal">{customerName}</span>
+        </h1>
+      ) : (
+        <h1 class="font-serif text-5xl md:text-7xl mb-6 font-light leading-tight">
+          Subscription <br/>
+          <span class="italic text-sb-gold font-normal">Confirmed</span>
+        </h1>
+      )}
+
+      <p class="text-gray-600 font-light leading-relaxed mb-10 text-lg max-w-md mx-auto">
+        Your Direct Debit mandate for <strong class="text-sb-black font-semibold">{planName}</strong> has been successfully set up. Every delivery is hand-tied by us personally and styled with pure botanical dedication.
       </p>
 
-      <div class="border-t border-gray-200 pt-8 mb-10">
-        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Need to update your dates?</p>
-        <p class="text-sm text-gray-500 font-light">Email Bilja at <a href="mailto:info@sbfloristry.co.uk" class="text-sb-black underline hover:text-sb-gold transition-colors">info@sbfloristry.co.uk</a></p>
+      <!-- Details Summary Card -->
+      <div class="bg-white border border-gray-100 p-8 shadow-sm mb-12 text-left relative">
+        <div class="absolute top-0 left-6 right-6 h-[2px] bg-sb-gold"></div>
+        <h3 class="text-[10px] uppercase tracking-luxury font-bold text-sb-gold mb-6">What Happens Next?</h3>
+        
+        <ul class="space-y-6 text-sm text-gray-600 font-light">
+          <li class="flex gap-4">
+            <span class="w-6 h-6 rounded-full bg-sb-cream text-sb-gold text-xs flex items-center justify-center font-bold shrink-0">1</span>
+            <div>
+              <p class="font-bold text-sb-black text-[11px] uppercase tracking-wider mb-1">Mandate Validation</p>
+              <p class="text-xs">Your bank will finalize and register the Direct Debit mandate (usually takes 2–3 business days). No action is needed from your side.</p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="w-6 h-6 rounded-full bg-sb-cream text-sb-gold text-xs flex items-center justify-center font-bold shrink-0">2</span>
+            <div>
+              <p class="font-bold text-sb-black text-[11px] uppercase tracking-wider mb-1">First Scheduled Delivery</p>
+              <p class="text-xs">We will curate your first design using the week's most premium seasonal imports and hand-deliver them beautifully packaged to your door.</p>
+            </div>
+          </li>
+          <li class="flex gap-4">
+            <span class="w-6 h-6 rounded-full bg-sb-cream text-sb-gold text-xs flex items-center justify-center font-bold shrink-0">3</span>
+            <div>
+              <p class="font-bold text-sb-black text-[11px] uppercase tracking-wider mb-1">Complete Flexibility</p>
+              <p class="text-xs">Need to pause deliveries while you are on holiday? Simply email Bilja 48 hours before your next scheduled cycle.</p>
+            </div>
+          </li>
+        </ul>
       </div>
 
-      <a href="/" class="inline-block bg-sb-black text-sb-gold px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-gold hover:text-sb-black transition-colors duration-300">
-        Return Home
+      <div class="border-t border-gray-200 pt-8 mb-12">
+        <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-2">Need to adjust your address or schedule?</p>
+        <p class="text-sm text-gray-500 font-light">Contact us anytime at <a href="mailto:info@sbfloristry.co.uk" class="text-sb-black underline hover:text-sb-gold transition-colors font-medium">info@sbfloristry.co.uk</a></p>
+      </div>
+
+      <a href="/" class="inline-block bg-sb-black text-sb-gold px-12 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-sb-gold hover:text-sb-black transition-colors duration-500 shadow-xl">
+        Return to Gallery
       </a>
     </div>
   </section>
