@@ -108,30 +108,15 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <section class="py-24 bg-sb-black text-sb-cream">
-    <div class="container mx-auto px-6 max-w-4xl text-center reveal">
-      <span class="text-sb-gold text-xs tracking-luxury uppercase font-bold mb-6 block">Yearly Occasions</span>
-      <h2 class="font-serif text-4xl md:text-6xl mb-8 font-light text-white">"Set & Forget" Gifting</h2>
-      <p class="text-gray-400 font-light leading-relaxed text-lg mb-10 max-w-2xl mx-auto">
-        Anniversaries, birthdays, Mother's Day—keep track of every important date effortlessly. Give us the dates and your budget, and we'll handle the rest, complete with a 48-hour reminder before we deliver.
-      </p>
-      <a href="/contact?subject=Set+And+Forget" class="inline-block bg-sb-gold text-sb-black px-10 py-4 text-xs font-bold uppercase tracking-luxury hover:bg-white transition-colors duration-300">
-        Setup Your Calendar
-      </a>
-    </div>
-  </section>
-
 </Layout>
 
 <script>
-  // Setup logic to trigger GoCardless flow
   document.querySelectorAll('.subscribe-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       const plan = e.target.getAttribute('data-plan');
       e.target.innerHTML = 'Processing...';
       
       try {
-        // This will call the Astro API endpoint we will create
         const response = await fetch('/api/gocardless/create-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -141,7 +126,6 @@ import Layout from '../layouts/Layout.astro';
         const data = await response.json();
         
         if (data.checkoutUrl) {
-          // Redirect user to the GoCardless hosted payment page
           window.location.href = data.checkoutUrl;
         } else {
           throw new Error('No checkout URL returned');
